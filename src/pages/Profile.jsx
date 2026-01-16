@@ -3,6 +3,7 @@ import { useAuth, ROLES } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { saveMember } from '../services/MemberService';
 import { validatePassword } from '../utils/validators';
+import DigitalCard from '../components/DigitalCard';
 import { Eye, EyeOff } from 'lucide-react';
 import './Profile.css';
 
@@ -71,11 +72,20 @@ const Profile = () => {
 
             <div className="profile-card card">
                 <div className="profile-photo-large">
-                    <div className="photo-placeholder">{user.name ? user.name.charAt(0) : 'U'}</div>
+                    {user.photo ? (
+                        <img src={user.photo} alt={user.name} className="profile-photo-img" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    ) : (
+                        <div className="photo-placeholder">{user.name ? user.name.charAt(0) : 'U'}</div>
+                    )}
                 </div>
                 <h2 className="profile-name">{user.name}</h2>
                 <span className="profile-role">{user.role}</span>
                 {user.memberNumber && <span className="profile-number">Socio #{user.memberNumber}</span>}
+            </div>
+
+            <div className="section digital-card-section">
+                <h3>Carnet Digital</h3>
+                <DigitalCard member={user} />
             </div>
 
             <div className="profile-settings section">

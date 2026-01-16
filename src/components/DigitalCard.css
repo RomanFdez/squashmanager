@@ -1,0 +1,217 @@
+.digital-card-container {
+    perspective: 1000px;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.digital-card {
+    width: 340px;
+    height: 220px;
+    background: linear-gradient(135deg, var(--card-primary) 0%, #000000 100%);
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    color: white;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Inter', sans-serif;
+    transition: transform 0.3s ease;
+}
+
+.digital-card:hover {
+    transform: translateY(-5px) scale(1.02);
+}
+
+/* Decorative circles */
+.digital-card::before {
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 150px;
+    height: 150px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+}
+
+.digital-card::after {
+    content: '';
+    position: absolute;
+    bottom: -30px;
+    left: -30px;
+    width: 100px;
+    height: 100px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 50%;
+}
+
+.card-header {
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.card-logo {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    background: white;
+    border-radius: 50%;
+    padding: 2px;
+}
+
+.card-club-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.card-body {
+    flex: 1;
+    padding: 15px 20px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.card-photo-wrapper {
+    flex-shrink: 0;
+}
+
+.card-photo {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    object-fit: cover;
+    border: 2px solid white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    background: #fff;
+}
+
+.card-photo-placeholder {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+}
+
+.card-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.card-member-name {
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin: 0 0 4px 0;
+    line-height: 1.2;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    /* Truncate if too long */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.card-detail-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font-size: 0.8rem;
+}
+
+.card-label {
+    opacity: 0.7;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    min-width: 45px;
+}
+
+.card-value {
+    font-weight: 600;
+}
+
+.card-value.number {
+    font-family: monospace;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+.card-value.badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 0.65rem;
+}
+
+.card-status-row {
+    margin-top: 6px;
+    display: flex;
+    gap: 8px;
+}
+
+.status-badge {
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 10px;
+    text-transform: uppercase;
+}
+
+.status-badge.active {
+    background: #22c55e;
+    color: white;
+    box-shadow: 0 2px 5px rgba(34, 197, 94, 0.4);
+}
+
+.status-badge.inactive {
+    background: #ef4444;
+    color: white;
+}
+
+.payment-badge {
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.payment-badge.paid {
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--card-primary);
+}
+
+.payment-badge.unpaid {
+    background: transparent;
+    color: #fca5a5;
+    border-color: #fca5a5;
+}
+
+
+.card-footer {
+    padding: 8px 20px;
+    background: rgba(0, 0, 0, 0.4);
+    text-align: right;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
