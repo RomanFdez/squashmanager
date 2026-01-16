@@ -1,10 +1,19 @@
 import { useEffect } from 'react';
-import { getConfig } from '../services/ConfigService';
+import { getConfig, fetchConfig } from '../services/ConfigService';
 
 export const useDynamicIcons = () => {
     useEffect(() => {
         const updateIcons = () => {
             const config = getConfig();
+
+            // Apply Colors to CSS Variables
+            if (config.primaryColor) {
+                document.documentElement.style.setProperty('--primary-color', config.primaryColor);
+            }
+            if (config.accentColor) {
+                document.documentElement.style.setProperty('--accent-color', config.accentColor);
+            }
+
             const logoUrl = config.appLogo;
 
             if (logoUrl) {
@@ -28,10 +37,11 @@ export const useDynamicIcons = () => {
             }
         };
 
-        // Run on mount
-        updateIcons();
+        // Initial load
+        updateIcons(); // Load from local cache immediately
+        fetchConfig(); // Fetch fresh config from DB (will trigger event)
 
-        // Listen for config changes (custom event dispatched by ConfigService)
+        // Listen for config changes
         window.addEventListener('configUpdated', updateIcons);
 
         return () => {
