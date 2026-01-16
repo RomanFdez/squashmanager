@@ -68,6 +68,13 @@ const MemberForm = ({ member, onSave, onDelete, onRemove, onCancel }) => {
                 [name]: type === 'checkbox' ? checked : value
             };
 
+            // Logic for switching to Junior
+            if (name === 'type' && value === 'junior') {
+                newData.role = ROLES_ENUM.SOCIO;
+                newData.password = '';
+                newData.confirmPassword = '';
+            }
+
             // Auto-fill email from guardianEmail if junior
             if (newData.type === 'junior' && name === 'guardianEmail') {
                 newData.email = value;
@@ -102,10 +109,9 @@ const MemberForm = ({ member, onSave, onDelete, onRemove, onCancel }) => {
             if (!/^\S+@\S+\.\S+$/.test(formData.email)) newErrors.email = 'Email no válido';
         }
 
-        // Password validation: only for new users or if changing
-        if (!member?.id || formData.password) {
-            // Simplified validation for juniors maybe? No, admins set passwords usually.
-            if (formData.password && !validatePassword(formData.password)) {
+        // Password validation: required for new users, optional for updates (only if field has value), SKIPPED for Juniors
+        if (formData.type !== 'junior' && (!member?.id || formData.password)) {
+            if (!validatePassword(formData.password)) {
                 newErrors.password = 'Mínimo 8 caracteres, una mayúscula, un número y un símbolo';
             }
             if (formData.password !== formData.confirmPassword) {
@@ -347,67 +353,73 @@ const MemberForm = ({ member, onSave, onDelete, onRemove, onCancel }) => {
                         </>
                     )}
 
-                    <div className="form-group">
-                        <label>Tipo de Socio / Cargo</label>
-                        <select name="role" value={formData.role} onChange={handleChange}>
-                            <option value={ROLES_ENUM.SOCIO}>Socio</option>
-                            <option value={ROLES_ENUM.PRESIDENTE}>Presidente</option>
-                            <option value={ROLES_ENUM.VICEPRESIDENTE}>Vicepresidente</option>
-                            <option value={ROLES_ENUM.SECRETARIO}>Secretario</option>
-                            <option value={ROLES_ENUM.TESORERO}>Tesorero</option>
-                            <option value={ROLES_ENUM.VOCAL}>Vocal</option>
-                        </select>
-                    </div>
+                    {formData.type !== 'junior' && (
+                        <div className="form-group">
+                            <label>Tipo de Socio / Cargo</label>
+                            <select name="role" value={formData.role} onChange={handleChange}>
+                                <option value={ROLES_ENUM.SOCIO}>Socio</option>
+                                <option value={ROLES_ENUM.PRESIDENTE}>Presidente</option>
+                                <option value={ROLES_ENUM.VICEPRESIDENTE}>Vicepresidente</option>
+                                <option value={ROLES_ENUM.SECRETARIO}>Secretario</option>
+                                <option value={ROLES_ENUM.TESORERO}>Tesorero</option>
+                                <option value={ROLES_ENUM.VOCAL}>Vocal</option>
+                            </select>
+                        </div>
+                    )}
 
                     <div className="form-group">
                         <label>Dirección Postal</label>
                         <textarea name="address" value={formData.address} onChange={handleChange} rows="2" />
                     </div>
 
-                    <div className="form-group">
-                        <label>Contraseña{member?.id ? ' (Opcional)' : '*'}</label>
-                        <div className="password-input-wrapper">
-                            <input
-                                type={showPassword ? 'text' : 'password'}
-                                name="password"
-                                value={formData.password}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                className={errors.password ? 'error' : ''}
-                                placeholder={member?.id ? 'Dejar en blanco para no cambiar' : ''}
-                            />
-                            <button
-                                type="button"
-                                className="password-toggle"
-                                onClick={() => setShowPassword(!showPassword)}
-                            >
-                                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                            </button>
-                        </div>
-                        {errors.password && <span className="error-text">{errors.password}</span>}
-                    </div>
-                    <div className="form-group">
-                        <label>Repetir Contraseña{member?.id ? ' (Opcional)' : '*'}</label>
-                        <div className="password-input-wrapper">
-                            <input
-                                type={showConfirmPassword ? 'text' : 'password'}
-                                name="confirmPassword"
-                                value={formData.confirmPassword}
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                className={errors.confirmPassword ? 'error' : ''}
-                                placeholder={member?.id ? 'Dejar en blanco para no cambiar' : ''}
-                            />
-                            <button
-                                type="button"
-                                className="password-toggle"
-                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                            >
-                                {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                            </button>
-                        </div>
-                        {errors.confirmPassword && <span className="error-text">{errors.confirmPassword}</span>}
-                    </div>
+                    {formData.type !== 'junior' && (
+                        <>
+                            <div className="form-group">
+                                <label>Contraseña{member?.id ? ' (Opcional)' : '*'}</label>
+                                <div className="password-input-wrapper">
+                                    <input
+                                        type={showPassword ? 'text' : 'password'}
+                                        name="password"
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        className={errors.password ? 'error' : ''}
+                                        placeholder={member?.id ? 'Dejar en blanco para no cambiar' : ''}
+                                    />
+                                    <button
+                                        type="button"
+                                        className="password-toggle"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                    >
+                                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                    </button>
+                                </div>
+                                {errors.password && <span className="error-text">{errors.password}</span>}
+                            </div>
+                            <div className="form-group">
+                                <label>Repetir Contraseña{member?.id ? ' (Opcional)' : '*'}</label>
+                                <div className="password-input-wrapper">
+                                    <input
+                                        type={showConfirmPassword ? 'text' : 'password'}
+                                        name="confirmPassword"
+                                        value={formData.confirmPassword}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        className={errors.confirmPassword ? 'error' : ''}
+                                        placeholder={member?.id ? 'Dejar en blanco para no cambiar' : ''}
+                                    />
+                                    <button
+                                        type="button"
+                                        className="password-toggle"
+                                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                    >
+                                        {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                                    </button>
+                                </div>
+                                {errors.confirmPassword && <span className="error-text">{errors.confirmPassword}</span>}
+                            </div>
+                        </>
+                    )}
 
                     <div className="form-group">
                         <label>Fecha de Alta</label>
