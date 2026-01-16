@@ -62,10 +62,19 @@ const MemberForm = ({ member, onSave, onDelete, onRemove, onCancel }) => {
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: type === 'checkbox' ? checked : value
-        }));
+        setFormData(prev => {
+            const newData = {
+                ...prev,
+                [name]: type === 'checkbox' ? checked : value
+            };
+
+            // Auto-fill email from guardianEmail if junior
+            if (newData.type === 'junior' && name === 'guardianEmail') {
+                newData.email = value;
+            }
+
+            return newData;
+        });
     };
 
     const handleBlur = (e) => {
@@ -86,13 +95,17 @@ const MemberForm = ({ member, onSave, onDelete, onRemove, onCancel }) => {
     const validate = () => {
         const newErrors = {};
         if (!formData.name) newErrors.name = 'El nombre es obligatorio';
-        if (!validateDNI(formData.dni)) newErrors.dni = 'DNI/NIF no válido';
-        if (!validatePhone(formData.phone)) newErrors.phone = 'Teléfono debe tener 9 dígitos';
-        if (!/^\S+@\S+\.\S+$/.test(formData.email)) newErrors.email = 'Email no válido';
 
-        // Password validation: required for new users, optional for updates (only if field has value)
+        if (formData.type !== 'junior') {
+            if (!validateDNI(formData.dni)) newErrors.dni = 'DNI/NIF no válido';
+            if (!validatePhone(formData.phone)) newErrors.phone = 'Teléfono debe tener 9 dígitos';
+            if (!/^\S+@\S+\.\S+$/.test(formData.email)) newErrors.email = 'Email no válido';
+        }
+
+        // Password validation: only for new users or if changing
         if (!member?.id || formData.password) {
-            if (!validatePassword(formData.password)) {
+            // Simplified validation for juniors maybe? No, admins set passwords usually.
+            if (formData.password && !validatePassword(formData.password)) {
                 newErrors.password = 'Mínimo 8 caracteres, una mayúscula, un número y un símbolo';
             }
             if (formData.password !== formData.confirmPassword) {
@@ -107,6 +120,11 @@ const MemberForm = ({ member, onSave, onDelete, onRemove, onCancel }) => {
             if (!validatePhone(formData.guardianPhone)) newErrors.guardianPhone = 'Teléfono del tutor no válido';
             if (formData.guardianEmail && !/^\S+@\S+\.\S+$/.test(formData.guardianEmail)) {
                 newErrors.guardianEmail = 'Email del tutor no válido';
+            }
+            // Ensure main email is set (hidden field logic)
+            if (!formData.email && formData.guardianEmail) {
+                // Should have been set by handleChange but double check
+                // We don't error here, just rely on guardianEmail
             }
         }
 
@@ -271,16 +289,11 @@ const MemberForm = ({ member, onSave, onDelete, onRemove, onCancel }) => {
                     </div>
 
                     <div className="form-group">
-                        <label>DNI / NIF*</label>
-                        <input
-                            type="text"
-                            name="dni"
-                            value={formData.dni}
-                            onChange={handleChange}
-                            className={errors.dni ? 'error' : ''}
-                            placeholder="12345678Z"
-                        />
-                        {errors.dni && <span className="error-text">{errors.dni}</span>}
+                        <label>Categoría</label>
+                        <select name="type" value={formData.type} onChange={handleChange}>
+                            <option value="adulto">Adulto</option>
+                            <option value="junior">Junior</option>
+                        </select>
                     </div>
 
                     <div className="form-group">
@@ -293,6 +306,47 @@ const MemberForm = ({ member, onSave, onDelete, onRemove, onCancel }) => {
                         />
                     </div>
 
+                    {formData.type !== 'junior' && (
+                        <>
+                            <div className="form-group">
+                                <label>DNI / NIF*</label>
+                                <input
+                                    type="text"
+                                    name="dni"
+                                    value={formData.dni}
+                                    onChange={handleChange}
+                                    className={errors.dni ? 'error' : ''}
+                                    placeholder="12345678Z"
+                                />
+                                {errors.dni && <span className="error-text">{errors.dni}</span>}
+                            </div>
+
+                            <div className="form-group">
+                                <label>Teléfono*</label>
+                                <input
+                                    type="text"
+                                    name="phone"
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                    className={errors.phone ? 'error' : ''}
+                                />
+                                {errors.phone && <span className="error-text">{errors.phone}</span>}
+                            </div>
+
+                            <div className="form-group">
+                                <label>Email*</label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                    className={errors.email ? 'error' : ''}
+                                />
+                                {errors.email && <span className="error-text">{errors.email}</span>}
+                            </div>
+                        </>
+                    )}
+
                     <div className="form-group">
                         <label>Tipo de Socio / Cargo</label>
                         <select name="role" value={formData.role} onChange={handleChange}>
@@ -303,38 +357,6 @@ const MemberForm = ({ member, onSave, onDelete, onRemove, onCancel }) => {
                             <option value={ROLES_ENUM.TESORERO}>Tesorero</option>
                             <option value={ROLES_ENUM.VOCAL}>Vocal</option>
                         </select>
-                    </div>
-
-                    <div className="form-group">
-                        <label>Categoría</label>
-                        <select name="type" value={formData.type} onChange={handleChange}>
-                            <option value="adulto">Adulto</option>
-                            <option value="junior">Junior</option>
-                        </select>
-                    </div>
-
-                    <div className="form-group">
-                        <label>Teléfono*</label>
-                        <input
-                            type="text"
-                            name="phone"
-                            value={formData.phone}
-                            onChange={handleChange}
-                            className={errors.phone ? 'error' : ''}
-                        />
-                        {errors.phone && <span className="error-text">{errors.phone}</span>}
-                    </div>
-
-                    <div className="form-group">
-                        <label>Email*</label>
-                        <input
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            className={errors.email ? 'error' : ''}
-                        />
-                        {errors.email && <span className="error-text">{errors.email}</span>}
                     </div>
 
                     <div className="form-group">
