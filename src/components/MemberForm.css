@@ -52,7 +52,7 @@
     color: var(--text-color-light);
 }
 
-.form-group input,
+.form-group input:not([type="checkbox"]):not([type="radio"]),
 .form-group textarea,
 .form-group select {
     width: 100%;
