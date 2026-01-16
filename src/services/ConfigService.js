@@ -57,8 +57,11 @@ export const saveConfig = async (newConfig) => {
     try {
         const { error } = await supabase
             .from('clubs')
-            .update({ config: configToSave })
-            .eq('id', CLUB_ID);
+            .upsert({
+                id: CLUB_ID,
+                name: configToSave.appTitle || 'Club',
+                config: configToSave
+            });
 
         if (error) throw error;
     } catch (err) {
