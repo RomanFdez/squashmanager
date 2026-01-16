@@ -10,8 +10,11 @@ import Admin from './pages/Admin';
 import Profile from './pages/Profile';
 import Login from './Login';
 import ProtectedRoute from './components/ProtectedRoute';
+import { useDynamicIcons } from './hooks/useDynamicIcons';
 
 function App() {
+  useDynamicIcons();
+
   return (
     <Router>
       <ThemeProvider>
