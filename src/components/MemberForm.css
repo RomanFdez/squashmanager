@@ -1,6 +1,9 @@
 .member-form {
-    max-width: 600px;
+    width: 100%;
+    max-width: 800px;
+    /* Increased from 600px */
     margin: 0 auto;
+    box-sizing: border-box;
 }
 
 .member-form h3 {
@@ -13,6 +16,8 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: var(--spacing-lg);
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 
@@ -28,9 +33,10 @@
     gap: var(--spacing-md);
 }
 
-@media (min-width: 480px) {
+@media (min-width: 600px) {
     .form-grid {
         grid-template-columns: 1fr 1fr;
+        column-gap: var(--spacing-lg);
     }
 }
 
@@ -49,6 +55,8 @@
 .form-group input,
 .form-group textarea,
 .form-group select {
+    width: 100%;
+    box-sizing: border-box;
     padding: 10px;
     border: 1px solid var(--border-color);
     border-radius: var(--radius-sm);
