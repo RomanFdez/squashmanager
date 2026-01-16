@@ -12,6 +12,7 @@ const Admin = () => {
     const [config, setConfig] = useState(getConfig());
     const { user } = useAuth();
     const [activeSection, setActiveSection] = useState('config'); // config, payments, audit
+    const [selectedLog, setSelectedLog] = useState(null);
     const [confirmDialog, setConfirmDialog] = useState({
         isOpen: false,
         title: '',
@@ -171,7 +172,7 @@ const Admin = () => {
                         <div className="audit-list">
                             {logs.length > 0 ? (
                                 logs.map(log => (
-                                    <div key={log.id} className="audit-item">
+                                    <div key={log.id} className="audit-item clickable" onClick={() => setSelectedLog(log)}>
                                         <span className="audit-time">
                                             {new Date(log.timestamp).toLocaleString('es-ES', {
                                                 day: '2-digit',
@@ -194,6 +195,34 @@ const Admin = () => {
                     </div>
                 )}
             </div>
+
+            {selectedLog && (
+                <div className="admin-modal-overlay" onClick={() => setSelectedLog(null)}>
+                    <div className="admin-modal-content" onClick={e => e.stopPropagation()}>
+                        <h3>Detalle de Actividad</h3>
+                        <div className="admin-modal-body">
+                            <div className="detail-row">
+                                <strong>Fecha:</strong>
+                                <span>{new Date(selectedLog.timestamp).toLocaleString('es-ES')}</span>
+                            </div>
+                            <div className="detail-row">
+                                <strong>Usuario:</strong>
+                                <span>{selectedLog.user}</span>
+                            </div>
+                            <div className="detail-row">
+                                <strong>Acción:</strong>
+                                <span>{selectedLog.action}</span>
+                            </div>
+                            <div className="log-detail-box">
+                                {selectedLog.details}
+                            </div>
+                        </div>
+                        <div className="admin-modal-footer">
+                            <button className="btn btn-primary" onClick={() => setSelectedLog(null)}>Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             <ConfirmDialog
                 isOpen={confirmDialog.isOpen}
