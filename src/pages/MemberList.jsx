@@ -140,9 +140,9 @@ const MemberList = () => {
                                     <th onClick={() => handleSort('memberNumber')} className="sortable">Nº {renderSortIcon('memberNumber')}</th>
                                     <th onClick={() => handleSort('name')} className="sortable">Nombre {renderSortIcon('name')}</th>
                                     <th onClick={() => handleSort('status')} className="sortable">Estado {renderSortIcon('status')}</th>
+                                    {canAccessTreasury && <th onClick={() => handleSort('isPaid')} className="sortable">Pago {renderSortIcon('isPaid')}</th>}
                                     <th onClick={() => handleSort('role')} className="sortable">Rol {renderSortIcon('role')}</th>
                                     <th>Categoría</th>
-                                    {canAccessTreasury && <th onClick={() => handleSort('isPaid')} className="sortable">Pago {renderSortIcon('isPaid')}</th>}
                                 </tr>
                             </thead>
                             <tbody>
@@ -168,15 +168,15 @@ const MemberList = () => {
                                                 {m.status === 'active' ? 'Activo' : 'Baja'}
                                             </span>
                                         </td>
-                                        <td className="col-role">{m.role}</td>
-                                        <td className="col-type">
-                                            {m.type === 'junior' ? 'Junior' : 'Adulto'}
-                                        </td>
                                         {canAccessTreasury && (
                                             <td className="col-payment">
                                                 {m.isPaid ? <span title="Pagado">✅</span> : <span title="Pendiente">❌</span>}
                                             </td>
                                         )}
+                                        <td className="col-role">{m.role}</td>
+                                        <td className="col-type">
+                                            {m.type === 'junior' ? 'Junior' : 'Adulto'}
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
