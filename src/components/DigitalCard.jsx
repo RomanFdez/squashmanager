@@ -4,16 +4,17 @@ import { getConfig } from '../services/ConfigService';
 
 const DigitalCard = ({ member }) => {
     const config = getConfig();
-    const logoSrc = config.logo || '/favicon.png'; // Fallback to favicon if no logo
+    const logoSrc = config.appLogo || '/favicon.png'; // Corrected property name
     const primaryColor = config.primaryColor || '#931c1f';
     const accentColor = config.accentColor || '#fbbf24';
+    const clubName = config.appTitle || 'Squash Ciudad de Murcia';
 
     return (
         <div className="digital-card-container">
             <div className="digital-card" style={{ '--card-primary': primaryColor, '--card-accent': accentColor }}>
                 <div className="card-header">
                     <img src={logoSrc} alt="Logo Club" className="card-logo" />
-                    <div className="card-club-name">Squash Ciudad de Murcia</div>
+                    <div className="card-club-name">{clubName}</div>
                 </div>
                 <div className="card-body">
                     <div className="card-photo-wrapper">
