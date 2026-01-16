@@ -21,6 +21,7 @@ const MemberForm = ({ member, onSave, onDelete, onRemove, onCancel }) => {
         password: '',
         confirmPassword: '',
         address: '',
+        birthDate: '',
         joinDate: new Date().toISOString().split('T')[0],
         leaveDate: '',
         role: ROLES_ENUM.SOCIO,
@@ -245,6 +246,16 @@ const MemberForm = ({ member, onSave, onDelete, onRemove, onCancel }) => {
                             placeholder="12345678Z"
                         />
                         {errors.dni && <span className="error-text">{errors.dni}</span>}
+                    </div>
+
+                    <div className="form-group">
+                        <label>Fecha de Nacimiento</label>
+                        <input
+                            type="date"
+                            name="birthDate"
+                            value={formData.birthDate || ''}
+                            onChange={handleChange}
+                        />
                     </div>
 
                     <div className="form-group">

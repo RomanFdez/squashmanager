@@ -26,7 +26,8 @@ const mapFromDb = (m) => ({
     guardianName: m.guardian_name,
     guardianDni: m.guardian_dni,
     guardianPhone: m.guardian_phone,
-    guardianEmail: m.guardian_email
+    guardianEmail: m.guardian_email,
+    birthDate: m.birth_date
 });
 
 // Helper to map App Model to DB columns
@@ -54,7 +55,8 @@ const mapToDb = (m) => {
         guardian_name: m.guardianName,
         guardian_dni: m.guardianDni,
         guardian_phone: m.guardianPhone,
-        guardian_email: m.guardianEmail
+        guardian_email: m.guardianEmail,
+        birth_date: m.birthDate || null
     };
 };
 
