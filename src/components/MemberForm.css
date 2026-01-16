@@ -65,6 +65,15 @@
     font-size: 1rem;
     transition: border-color var(--transition-fast);
     font-family: inherit;
+    appearance: none;
+    -webkit-appearance: none;
+    min-height: 42px;
+    /* Force uniform height */
+}
+
+.form-group textarea {
+    min-height: 80px;
+    resize: vertical;
 }
 
 .form-group input:focus,
