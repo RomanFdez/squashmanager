@@ -15,6 +15,7 @@ const Treasury = () => {
     const [activeTab, setActiveTab] = useState('summary'); // summary, movements
 
     const [loading, setLoading] = useState(true);
+    const [filters, setFilters] = useState({ month: 'all', type: 'all' });
 
     useEffect(() => {
         loadData();
@@ -47,6 +48,20 @@ const Treasury = () => {
             await loadData();
         }
     };
+
+    const getFilteredMovements = () => {
+        return movements.filter(m => {
+            if (filters.type !== 'all' && m.type !== filters.type) return false;
+
+            if (filters.month !== 'all') {
+                const month = new Date(m.date).getMonth(); // 0-11
+                if (month !== parseInt(filters.month)) return false;
+            }
+            return true;
+        }).sort((a, b) => new Date(b.date) - new Date(a.date));
+    };
+
+    const filteredMovements = getFilteredMovements();
 
     return (
         <div className="treasury-page container">
@@ -143,14 +158,39 @@ const Treasury = () => {
 
                         {activeTab === 'movements' && (
                             <div className="movements-view">
-                                <div className="list-actions">
+                                <div className="list-controls">
+                                    <div className="filters-row">
+                                        <select
+                                            value={filters.month}
+                                            onChange={(e) => setFilters(prev => ({ ...prev, month: e.target.value }))}
+                                            className="form-select"
+                                        >
+                                            <option value="all">Todos los Meses</option>
+                                            {Array.from({ length: 12 }, (_, i) => (
+                                                <option key={i} value={i}>
+                                                    {new Intl.DateTimeFormat('es-ES', { month: 'long' }).format(new Date(year, i))}
+                                                </option>
+                                            ))}
+                                        </select>
+
+                                        <select
+                                            value={filters.type}
+                                            onChange={(e) => setFilters(prev => ({ ...prev, type: e.target.value }))}
+                                            className="form-select"
+                                        >
+                                            <option value="all">Todos los Tipos</option>
+                                            <option value="income">Ingresos</option>
+                                            <option value="expense">Gastos</option>
+                                        </select>
+                                    </div>
+
                                     <button className="btn btn-primary" onClick={() => setIsAdding(true)}>
                                         + Nuevo Movimiento
                                     </button>
                                 </div>
 
                                 <div className="movements-list">
-                                    {movements.sort((a, b) => new Date(b.date) - new Date(a.date)).map(m => (
+                                    {filteredMovements.map(m => (
                                         <div key={m.id} className="movement-item card">
                                             <div className="m-date">{new Date(m.date).toLocaleDateString()}</div>
                                             <div className="m-info">
@@ -166,8 +206,8 @@ const Treasury = () => {
                                             </div>
                                         </div>
                                     ))}
-                                    {movements.length === 0 && (
-                                        <div className="no-results card">No hay movimientos registrados en este año.</div>
+                                    {filteredMovements.length === 0 && (
+                                        <div className="no-results card">No hay movimientos que coincidan con los filtros.</div>
                                     )}
                                 </div>
                             </div>

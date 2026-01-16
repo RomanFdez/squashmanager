@@ -234,3 +234,42 @@ th {
 .m-actions button:hover {
     background: var(--bg-color-alt);
 }
+
+.list-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+    flex-wrap: wrap;
+    gap: var(--spacing-md);
+}
+
+.filters-row {
+    display: flex;
+    gap: var(--spacing-md);
+}
+
+.form-select {
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    min-width: 140px;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 600px) {
+    .list-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filters-row {
+        flex-direction: column;
+    }
+
+    .form-select {
+        width: 100%;
+    }
+}
