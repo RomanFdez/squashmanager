@@ -6,6 +6,6 @@
 ## SaaS y Multi-Club
 - [x] Configuración centralizada de colores y logo.
 - [x] Separación de datos por `clubId` (StorageService).
-- [ ] **Base de Datos en la Nube:** Migrar de `localStorage` a Supabase (PostgreSQL).
-- [ ] **Hosting:** Desplegar en Vercel.
+- [x] **Base de Datos en la Nube:** Migrar de `localStorage` a Supabase (PostgreSQL).
+- [x] **Hosting:** Desplegar en Netlify.
 - [ ] **Gestión de Alta/Baja de Clubes:** Panel para dar de alta nuevos clubes (tenants) y gestionar sus suscripciones.
