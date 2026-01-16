@@ -1,0 +1,9 @@
+.movement-form {
+    max-width: 500px;
+    margin: 20px auto;
+}
+
+.movement-form h3 {
+    margin-bottom: var(--spacing-lg);
+    color: var(--primary-color);
+}

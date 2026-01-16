@@ -1,0 +1,236 @@
+.treasury-page .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.year-selector {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    background: var(--card-bg);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.year-selector button {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    font-size: 1rem;
+}
+
+.year-selector button:hover {
+    background: var(--bg-color-alt);
+}
+
+.treasury-tabs {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 2px;
+}
+
+.tab {
+    padding: 10px 20px;
+    font-weight: 600;
+    color: var(--text-color-light);
+    border-bottom: 2px solid transparent;
+    transition: all var(--transition-fast);
+}
+
+.tab.active {
+    color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
+}
+
+.totals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-xl);
+}
+
+.total-card {
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-md);
+    background: var(--card-bg);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.total-card .label {
+    font-size: 0.85rem;
+    color: var(--text-color-light);
+    font-weight: 600;
+}
+
+.total-card .value {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.total-card.income .value {
+    color: var(--success-color);
+}
+
+.total-card.expense .value {
+    color: var(--danger-color);
+}
+
+
+
+.total-card.balance .value {
+    color: var(--primary-color);
+}
+
+.total-card.balance .value.positive {
+    color: var(--success-color);
+}
+
+.total-card.balance .value.negative {
+    color: var(--danger-color);
+}
+
+.table-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-md);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.table-header-row h3 {
+    margin: 0;
+}
+
+.initial-balance-display {
+    display: flex;
+    gap: var(--spacing-sm);
+    font-size: 1rem;
+    align-items: center;
+}
+
+.initial-balance-display .label {
+    color: var(--text-color-light);
+    font-weight: 600;
+}
+
+.initial-balance-display .value {
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th,
+td {
+    padding: var(--spacing-md);
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+th {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: var(--text-color-light);
+    font-weight: 700;
+}
+
+.month-name {
+    text-transform: capitalize;
+    font-weight: 600;
+}
+
+.income-cell {
+    color: var(--success-color);
+}
+
+.expense-cell {
+    color: var(--danger-color);
+}
+
+.total-cell {
+    font-weight: 700;
+}
+
+.total-cell.positive {
+    color: var(--success-color);
+}
+
+.total-cell.negative {
+    color: var(--danger-color);
+}
+
+.list-actions {
+    margin-bottom: var(--spacing-md);
+}
+
+.movement-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+}
+
+.m-date {
+    font-size: 0.8rem;
+    color: var(--text-color-light);
+    width: 90px;
+}
+
+.m-info {
+    flex: 1;
+}
+
+.m-concept {
+    font-weight: 600;
+}
+
+.m-type {
+    font-size: 0.75rem;
+    color: var(--text-color-light);
+    text-transform: uppercase;
+}
+
+.m-amount {
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.m-amount.income {
+    color: var(--success-color);
+}
+
+.m-amount.expense {
+    color: var(--danger-color);
+}
+
+.m-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.m-actions button {
+    padding: 6px;
+    border-radius: 50%;
+}
+
+.m-actions button:hover {
+    background: var(--bg-color-alt);
+}

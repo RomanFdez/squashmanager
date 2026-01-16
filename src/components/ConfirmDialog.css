@@ -1,0 +1,62 @@
+.confirm-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.confirm-modal {
+    background-color: var(--card-bg);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    width: 90%;
+    max-width: 400px;
+    padding: var(--spacing-lg);
+    border: 1px solid var(--border-color);
+    animation: slideUp 0.2s ease-out;
+}
+
+.confirm-header h3 {
+    margin-bottom: var(--spacing-md);
+    color: var(--text-color);
+}
+
+.confirm-body {
+    margin-bottom: var(--spacing-xl);
+    color: var(--text-color-light);
+}
+
+.confirm-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--spacing-md);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

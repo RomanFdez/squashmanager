@@ -1,0 +1,127 @@
+.admin-tabs {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 2px;
+}
+
+.payments-section {
+    padding: var(--spacing-lg);
+}
+
+.mb-4 {
+    margin-bottom: var(--spacing-lg);
+}
+
+.config-section,
+.audit-section {
+    padding: var(--spacing-lg);
+}
+
+.logo-preview {
+    margin-top: var(--spacing-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    align-items: center;
+}
+
+.logo-preview img {
+    max-width: 150px;
+    max-height: 150px;
+    border-radius: var(--radius-sm);
+    object-fit: contain;
+    background-color: var(--secondary-color);
+    padding: 10px;
+}
+
+
+
+.audit-list {
+    max-height: 600px;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background-color: var(--card-bg);
+}
+
+.audit-item {
+    padding: 6px 12px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.85rem;
+    font-family: 'Roboto Mono', monospace;
+    /* Fallback to monospace for alignment */
+}
+
+.audit-item:hover {
+    background-color: var(--bg-color-alt);
+}
+
+.audit-item:last-child {
+    border-bottom: none;
+}
+
+.audit-time {
+    color: var(--text-color-light);
+    font-size: 0.8rem;
+    min-width: 100px;
+}
+
+.audit-user {
+    font-weight: 700;
+    color: var(--primary-color);
+    min-width: 80px;
+    /* Optional: limit width */
+}
+
+.audit-content-inline {
+    display: flex;
+    gap: 8px;
+    flex: 1;
+    overflow: hidden;
+}
+
+.audit-action {
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    padding: 2px 6px;
+    background-color: var(--section-bg, #eee);
+    border-radius: 4px;
+    color: var(--text-color);
+    white-space: nowrap;
+}
+
+.audit-details {
+    color: var(--text-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+}
+
+.color-pickers-row {
+    display: flex;
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+.color-picker-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.color-picker-item input[type="color"] {
+    width: 60px;
+    height: 40px;
+    padding: 0;
+    border: none;
+    cursor: pointer;
+    background: none;
+}
