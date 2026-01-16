@@ -139,10 +139,9 @@ const MemberList = () => {
                                 <tr>
                                     <th onClick={() => handleSort('memberNumber')} className="sortable">Nº {renderSortIcon('memberNumber')}</th>
                                     <th onClick={() => handleSort('name')} className="sortable">Nombre {renderSortIcon('name')}</th>
-                                    <th>DNI</th>
+                                    <th onClick={() => handleSort('status')} className="sortable">Estado {renderSortIcon('status')}</th>
                                     <th onClick={() => handleSort('role')} className="sortable">Rol {renderSortIcon('role')}</th>
                                     <th>Categoría</th>
-                                    <th onClick={() => handleSort('status')} className="sortable">Estado {renderSortIcon('status')}</th>
                                     {canAccessTreasury && <th onClick={() => handleSort('isPaid')} className="sortable">Pago {renderSortIcon('isPaid')}</th>}
                                 </tr>
                             </thead>
@@ -164,15 +163,14 @@ const MemberList = () => {
                                                 <span>{m.name}</span>
                                             </div>
                                         </td>
-                                        <td className="col-dni">{m.dni}</td>
-                                        <td className="col-role">{m.role}</td>
-                                        <td className="col-type">
-                                            {m.type === 'junior' ? 'Junior' : 'Adulto'}
-                                        </td>
                                         <td className="col-status">
                                             <span className={`status-badge ${m.status}`}>
                                                 {m.status === 'active' ? 'Activo' : 'Baja'}
                                             </span>
+                                        </td>
+                                        <td className="col-role">{m.role}</td>
+                                        <td className="col-type">
+                                            {m.type === 'junior' ? 'Junior' : 'Adulto'}
                                         </td>
                                         {canAccessTreasury && (
                                             <td className="col-payment">
