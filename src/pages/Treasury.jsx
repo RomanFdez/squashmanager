@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { getMovements, saveMovement, deleteMovement, calculateTotals } from '../services/TreasuryService';
 import { useAuth } from '../context/AuthContext';
-import { Pencil, Trash2 } from 'lucide-react';
+import { Pencil, Trash2, Download } from 'lucide-react';
 import MovementForm from '../components/MovementForm';
+import { exportToCSV } from '../services/ExportService';
 import './Treasury.css';
 
 const Treasury = () => {
@@ -62,6 +63,17 @@ const Treasury = () => {
     };
 
     const filteredMovements = getFilteredMovements();
+
+    const handleExport = () => {
+        const exportData = filteredMovements.map(m => ({
+            Fecha: new Date(m.date).toLocaleDateString(),
+            Concepto: m.concept,
+            Tipo: m.type === 'income' ? 'Ingreso' : 'Gasto',
+            Cantidad: m.amount,
+            Categoria: m.category || ''
+        }));
+        exportToCSV(exportData, `tesoreria_${year}`);
+    };
 
     return (
         <div className="treasury-page container">
@@ -184,9 +196,14 @@ const Treasury = () => {
                                         </select>
                                     </div>
 
-                                    <button className="btn btn-primary" onClick={() => setIsAdding(true)}>
-                                        + Nuevo Movimiento
-                                    </button>
+                                    <div style={{ display: 'flex', gap: '8px' }}>
+                                        <button className="btn btn-secondary" onClick={handleExport} style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '8px' }}>
+                                            <Download size={18} />
+                                        </button>
+                                        <button className="btn btn-primary" onClick={() => setIsAdding(true)}>
+                                            + Nuevo Movimiento
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <div className="movements-list">

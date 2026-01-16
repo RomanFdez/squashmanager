@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { getMembers, saveMember, deleteMember, removeMember } from '../services/MemberService';
 import { useAuth } from '../context/AuthContext';
-import { Pencil } from 'lucide-react';
+import { Pencil, Download } from 'lucide-react';
 import MemberCard from '../components/MemberCard';
+import { exportToCSV } from '../services/ExportService';
 import MemberForm from '../components/MemberForm';
 import './MemberList.css';
 
@@ -90,6 +91,21 @@ const MemberList = () => {
         );
     }
 
+    const handleExport = () => {
+        const exportData = filteredAndSortedMembers.map(m => ({
+            Numero: m.memberNumber,
+            Nombre: m.name,
+            DNI: m.dni,
+            Email: m.email,
+            Telefono: m.phone,
+            Estado: m.status,
+            Rol: m.role,
+            Categoria: m.type,
+            Pagado: m.isPaid ? 'SI' : 'NO'
+        }));
+        exportToCSV(exportData, 'socios_squash');
+    };
+
     const renderSortIcon = (key) => {
         if (sortConfig.key !== key) return null;
         return sortConfig.direction === 'asc' ? ' 🔼' : ' 🔽';
@@ -119,6 +135,10 @@ const MemberList = () => {
                         <option value="inactive">Bajas</option>
                     </select>
                 </div>
+
+                <button className="btn btn-secondary" onClick={handleExport} style={{ marginRight: '10px', display: 'flex', alignItems: 'center', gap: '5px', padding: '8px' }}>
+                    <Download size={18} />
+                </button>
 
                 {canManageMembers && (
                     <button className="btn btn-primary add-btn" onClick={() => setIsAdding(true)}>
