@@ -504,46 +504,45 @@ const MemberForm = ({ member, onSave, onDelete, onRemove, onCancel }) => {
                                 />
                                 {errors.guardianEmail && <span className="error-text">{errors.guardianEmail}</span>}
                             </div>
-                        </div>
-                </>
+                        </>
                     )}
 
-                <div className="form-divider-row">
-                    <hr />
-                    <span>Foto / Documento (Opcional)</span>
-                </div>
+                    <div className="form-divider-row">
+                        <hr />
+                        <span>Foto / Documento (Opcional)</span>
+                    </div>
 
-                <div className="form-group photo-upload-group">
-                    <label>Adjuntar Imagen</label>
-                    <div className="photo-upload-container">
-                        <div className="photo-preview">
-                            {formData.photo ? (
-                                <img src={formData.photo} alt="Vista previa" className="preview-img" style={{ width: '100px', height: '100px', objectFit: 'contain', borderRadius: '8px', border: '1px solid #ddd', padding: '4px' }} />
-                            ) : (
-                                <div className="preview-placeholder" style={{ width: '100px', height: '100px', borderRadius: '8px', background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#888', fontSize: '12px' }}>Sin imagen</div>
-                            )}
-                        </div>
-                        <div className="file-input-wrapper" style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
-                            <input
-                                type="file"
-                                accept="image/*"
-                                onChange={handleFileChange}
-                                disabled={isUploading}
-                            />
-                            {isUploading && <span className="uploading-text">Subiendo...</span>}
-                            <small className="help-text">Máximo 1MB</small>
+                    <div className="form-group photo-upload-group">
+                        <label>Adjuntar Imagen</label>
+                        <div className="photo-upload-container">
+                            <div className="photo-preview">
+                                {formData.photo ? (
+                                    <img src={formData.photo} alt="Vista previa" className="preview-img" style={{ width: '100px', height: '100px', objectFit: 'contain', borderRadius: '8px', border: '1px solid #ddd', padding: '4px' }} />
+                                ) : (
+                                    <div className="preview-placeholder" style={{ width: '100px', height: '100px', borderRadius: '8px', background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#888', fontSize: '12px' }}>Sin imagen</div>
+                                )}
+                            </div>
+                            <div className="file-input-wrapper" style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleFileChange}
+                                    disabled={isUploading}
+                                />
+                                {isUploading && <span className="uploading-text">Subiendo...</span>}
+                                <small className="help-text">Máximo 1MB</small>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div className="form-actions">
-                <button type="button" className="btn btn-secondary" onClick={onCancel}>Cancelar</button>
-                <button type="submit" className="btn btn-primary" disabled={isSaving}>
-                    {isSaving ? 'Guardando...' : (member?.id ? 'Guardar Cambios' : 'Crear Socio')}
-                </button>
-            </div>
-        </form >
+                <div className="form-actions">
+                    <button type="button" className="btn btn-secondary" onClick={onCancel}>Cancelar</button>
+                    <button type="submit" className="btn btn-primary" disabled={isSaving}>
+                        {isSaving ? 'Guardando...' : (member?.id ? 'Guardar Cambios' : 'Crear Socio')}
+                    </button>
+                </div>
+            </form >
             <ConfirmDialog
                 isOpen={confirmDialog.isOpen}
                 title={confirmDialog.title}
