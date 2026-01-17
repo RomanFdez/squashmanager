@@ -17,23 +17,20 @@ export const useDynamicIcons = () => {
             const logoUrl = config.appLogo;
 
             if (logoUrl) {
-                // Update Favicon
-                let favicon = document.querySelector("link[rel~='icon']");
-                if (!favicon) {
-                    favicon = document.createElement('link');
-                    favicon.rel = 'icon';
-                    document.head.appendChild(favicon);
-                }
-                favicon.href = logoUrl;
+                const updateLink = (rel) => {
+                    let link = document.querySelector(`link[rel='${rel}']`);
+                    if (!link) {
+                        link = document.createElement('link');
+                        link.rel = rel;
+                        document.head.appendChild(link);
+                    }
+                    link.href = logoUrl;
+                };
 
-                // Update Apple Touch Icon (iPhone home screen)
-                let appleIcon = document.querySelector("link[rel='apple-touch-icon']");
-                if (!appleIcon) {
-                    appleIcon = document.createElement('link');
-                    appleIcon.rel = 'apple-touch-icon';
-                    document.head.appendChild(appleIcon);
-                }
-                appleIcon.href = logoUrl;
+                updateLink('icon');
+                updateLink('shortcut icon');
+                updateLink('apple-touch-icon');
+                updateLink('apple-touch-icon-precomposed');
             }
         };
 
