@@ -85,6 +85,12 @@ const Admin = () => {
                     Gestión de Pagos
                 </button>
                 <button
+                    className={`tab ${activeSection === 'comm' ? 'active' : ''}`}
+                    onClick={() => setActiveSection('comm')}
+                >
+                    Comunicaciones
+                </button>
+                <button
                     className={`tab ${activeSection === 'audit' ? 'active' : ''}`}
                     onClick={() => setActiveSection('audit')}
                 >
@@ -163,6 +169,43 @@ const Admin = () => {
                         <button className="btn btn-primary btn-danger-action" onClick={handleResetPayments}>
                             ⚠️ Reiniciar Pagos de Todos los Socios
                         </button>
+                    </div>
+                )}
+
+                {activeSection === 'comm' && (
+                    <div className="comm-section card">
+                        <h3>Plantilla de Correo Electrónico</h3>
+                        <p className="mb-4">Edita el correo que se enviará a los socios.</p>
+
+                        <div className="form-group">
+                            <label>Asunto</label>
+                            <input
+                                type="text"
+                                name="emailSubject"
+                                value={config.emailSubject || ''}
+                                onChange={handleConfigChange}
+                                placeholder="Asunto del correo"
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Cuerpo del Mensaje</label>
+                            <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '8px' }}>Usa <code>{`{{nombre}}`}</code> para insertar el nombre del socio automáticamente.</p>
+                            <textarea
+                                name="emailBody"
+                                value={config.emailBody || ''}
+                                onChange={handleConfigChange}
+                                rows={15}
+                                style={{
+                                    width: '100%',
+                                    padding: '0.75rem',
+                                    border: '1px solid #ddd',
+                                    borderRadius: '8px',
+                                    fontFamily: 'monospace',
+                                    resize: 'vertical'
+                                }}
+                            />
+                        </div>
                     </div>
                 )}
 

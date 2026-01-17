@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { getMembers, saveMember, deleteMember, removeMember } from '../services/MemberService';
 import { useAuth } from '../context/AuthContext';
-import { Pencil, Download } from 'lucide-react';
+import { Pencil, Download, Mail } from 'lucide-react';
 import MemberCard from '../components/MemberCard';
 import { exportToCSV } from '../services/ExportService';
 import MemberForm from '../components/MemberForm';
+import { getConfig } from '../services/ConfigService';
 import './MemberList.css';
 
 const MemberList = () => {
@@ -111,6 +112,25 @@ const MemberList = () => {
         exportToCSV(exportData, 'socios_squash');
     };
 
+    const handleSendEmail = (e, member) => {
+        e.stopPropagation(); // Avoid opening edit modal
+        if (!member.email) {
+            alert('Este socio no tiene email registrado.');
+            return;
+        }
+
+        const config = getConfig();
+        const subject = config.emailSubject || 'Comunicado Squash Ciudad de Murcia';
+        const bodyTemplate = config.emailBody || `Hola {{nombre}}, ...`;
+
+        const body = bodyTemplate.replace(/{{nombre}}/g, member.name);
+
+        if (window.confirm(`¿Quieres abrir el gestor de correo para enviar un email a ${member.name}?`)) {
+            const mailtoLink = `mailto:${member.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoLink;
+        }
+    };
+
     const renderSortIcon = (key) => {
         if (sortConfig.key !== key) return null;
         return sortConfig.direction === 'asc' ? ' 🔼' : ' 🔽';
@@ -174,6 +194,7 @@ const MemberList = () => {
                                     {canAccessTreasury && <th onClick={() => handleSort('isPaid')} className="sortable">Pago {renderSortIcon('isPaid')}</th>}
                                     <th onClick={() => handleSort('role')} className="sortable">Rol {renderSortIcon('role')}</th>
                                     <th>Categoría</th>
+                                    {canAccessTreasury && <th>Acciones</th>}
                                 </tr>
                             </thead>
                             <tbody>
@@ -208,6 +229,18 @@ const MemberList = () => {
                                         <td className="col-type">
                                             {m.type === 'junior' ? 'Junior' : 'Adulto'}
                                         </td>
+                                        {canAccessTreasury && (
+                                            <td className="col-actions">
+                                                <button
+                                                    className="btn-icon"
+                                                    title="Enviar correo"
+                                                    onClick={(e) => handleSendEmail(e, m)}
+                                                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--primary-color)' }}
+                                                >
+                                                    <Mail size={18} />
+                                                </button>
+                                            </td>
+                                        )}
                                     </tr>
                                 ))}
                             </tbody>

@@ -9,6 +9,29 @@ export const DEFAULT_CONFIG = {
     appLogo: null,
     primaryColor: '#931c1f',
     accentColor: '#fbbf24',
+    emailSubject: 'Renovación Cuota y Licencia 2026 - Squash Ciudad de Murcia',
+    emailBody: `Hola {{nombre}},
+
+Arrancamos este 2026 con más fuerza que nunca en el Squash Ciudad de Murcia y queremos contar contigo.
+
+Este año queremos dar un salto de calidad y te animamos a renovar tu cuota y sacar la Licencia Federativa.
+
+¿Por qué es importante federarse este año?
+1. Ahorro para el club: Nos permite ahorrar unos 200€ en la organización de CADA torneo.
+2. Amortización rápida: Recuperas el coste enseguida gracias a la reducción en precios de inscripción y seguros.
+3. Seguridad: Incluye seguro médico deportivo para cualquier accidente en torneos.
+
+📅 Calendario 2026:
+Hemos proyectado 5 grandes eventos para este año:
+- 3 Torneos Absolutos: Competición y convivencia (sábados por la mañana).
+- 1 o 2 Torneos Junior: Para potenciar nuestra cantera.
+
+Con la contribución de todos, haremos que el squash crezca en nuestra ciudad.
+
+¡Esperamos tu renovación!
+
+Un saludo,
+La Directiva del Squash Ciudad de Murcia.`
 };
 
 // Sync getter (from local cache) - useful for initial render
