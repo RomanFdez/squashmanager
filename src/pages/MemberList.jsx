@@ -52,7 +52,9 @@ const MemberList = () => {
             const matchesFilter = filter === 'all' ||
                 (filter === 'active' && m.status !== 'inactive') ||
                 (filter === 'inactive' && m.status === 'inactive');
-            const matchesType = typeFilter === 'all' || m.type === typeFilter || (!m.type && typeFilter === 'adult');
+            const matchesType = typeFilter === 'all' ||
+                (typeFilter === 'junior' && m.type === 'junior') ||
+                (typeFilter === 'adult' && m.type !== 'junior');
 
             return matchesSearch && matchesFilter && matchesType;
         })
