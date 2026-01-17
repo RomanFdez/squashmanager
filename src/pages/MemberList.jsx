@@ -14,6 +14,7 @@ const MemberList = () => {
     const [editingMember, setEditingMember] = useState(null);
     const [search, setSearch] = useState('');
     const [filter, setFilter] = useState('all'); // all, active, inactive
+    const [typeFilter, setTypeFilter] = useState('all'); // all, adult, junior
 
     const [loading, setLoading] = useState(true);
     const [sortConfig, setSortConfig] = useState({ key: 'memberNumber', direction: 'asc' });
@@ -51,7 +52,9 @@ const MemberList = () => {
             const matchesFilter = filter === 'all' ||
                 (filter === 'active' && m.status !== 'inactive') ||
                 (filter === 'inactive' && m.status === 'inactive');
-            return matchesSearch && matchesFilter;
+            const matchesType = typeFilter === 'all' || m.type === typeFilter || (!m.type && typeFilter === 'adult');
+
+            return matchesSearch && matchesFilter && matchesType;
         })
         .sort((a, b) => {
             if (a[sortConfig.key] < b[sortConfig.key]) {
@@ -128,11 +131,17 @@ const MemberList = () => {
                     />
                 </div>
 
-                <div className="filter-box">
+                <div className="filter-box" style={{ display: 'flex', gap: '8px' }}>
                     <select value={filter} onChange={(e) => setFilter(e.target.value)}>
-                        <option value="all">Todos</option>
+                        <option value="all">Estado: Todos</option>
                         <option value="active">Activos</option>
                         <option value="inactive">Bajas</option>
+                    </select>
+
+                    <select value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}>
+                        <option value="all">Tipo: Todos</option>
+                        <option value="adult">Adultos</option>
+                        <option value="junior">Juniors</option>
                     </select>
                 </div>
 
