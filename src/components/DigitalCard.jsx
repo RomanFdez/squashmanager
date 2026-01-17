@@ -8,6 +8,7 @@ const DigitalCard = ({ member }) => {
     const primaryColor = config.primaryColor || '#931c1f';
     const accentColor = config.accentColor || '#fbbf24';
     const clubName = config.appTitle || 'Squash Ciudad de Murcia';
+    const currentYear = new Date().getFullYear();
 
     return (
         <div className="digital-card-container">
@@ -46,14 +47,14 @@ const DigitalCard = ({ member }) => {
                             </span>
                             {member.status === 'active' && (
                                 <span className={`payment-badge ${member.isPaid ? 'paid' : 'unpaid'}`}>
-                                    {member.isPaid ? '2025 PAGADO' : 'PENDIENTE'}
+                                    {member.isPaid ? `${currentYear} PAGADO` : 'PENDIENTE'}
                                 </span>
                             )}
                         </div>
                     </div>
                 </div>
                 <div className="card-footer">
-                    Temporada 2025
+                    Temporada {currentYear}
                 </div>
             </div>
         </div>
