@@ -80,8 +80,6 @@ const MemberForm = ({ member, onSave, onDelete, onRemove, onCancel }) => {
         });
     };
 
-    // [Removed handleBlur]
-
     const validate = () => {
         const newErrors = {};
         if (!formData.name) newErrors.name = 'El nombre es obligatorio';
@@ -91,8 +89,6 @@ const MemberForm = ({ member, onSave, onDelete, onRemove, onCancel }) => {
             if (!validatePhone(formData.phone)) newErrors.phone = 'Teléfono debe tener 9 dígitos';
             if (!/^\S+@\S+\.\S+$/.test(formData.email)) newErrors.email = 'Email no válido';
         }
-
-        // [Removed password validation]
 
         // Junior validation
         if (formData.type === 'junior') {
@@ -346,8 +342,6 @@ const MemberForm = ({ member, onSave, onDelete, onRemove, onCancel }) => {
                         <label>Dirección Postal</label>
                         <textarea name="address" value={formData.address} onChange={handleChange} rows="2" />
                     </div>
-
-// [Removed password block]
 
                     <div className="form-group">
                         <label>Fecha de Alta</label>
