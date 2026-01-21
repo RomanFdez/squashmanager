@@ -77,8 +77,12 @@ export const AuthProvider = ({ children }) => {
                     userData = {
                         ...userData,
                         ...member,
-                        // Ensure ID is consistent. Maybe we want member.id (database ID) or user.id (auth ID).
-                        // Let's keep member.id as primary ID for app logic, but store auth_id too.
+                        // Map snake_case to camelCase for App consistency
+                        photo: member.photo_url,
+                        memberNumber: member.member_number,
+                        isPaid: member.is_paid,
+                        leaveDate: member.leave_date,
+                        birthDate: member.birth_date,
                         auth_id: session.user.id
                     };
                 }
