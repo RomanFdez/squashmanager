@@ -16,7 +16,6 @@ const mapFromDb = (m) => ({
     isPaid: m.is_paid,
     photo: m.photo_url,
     leaveDate: m.leave_date,
-    password: m.password, // Only if we store it here (not recommended in plain text, but simplifying for now as per previous context)
     email: m.email,
     phone: m.phone,
     address: m.address,
@@ -45,7 +44,6 @@ const mapToDb = (m) => {
         is_paid: m.isPaid,
         photo_url: m.photo,
         leave_date: m.leaveDate || null, // Fix: Postgres rejects empty string for date
-        password: m.password,
         email: m.email,
         phone: m.phone,
         address: m.address,
