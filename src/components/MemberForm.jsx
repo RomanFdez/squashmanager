@@ -119,7 +119,7 @@ const MemberForm = ({ member, onSave, onDelete, onRemove, onCancel }) => {
                 await onSave(formData);
             } catch (error) {
                 console.error("Error saving member:", error);
-                alert("Error al guardar el socio. Comprueba la consola para más detalles.");
+                alert(`Error al guardar: ${error.message || error.error_description || JSON.stringify(error)}`);
             } finally {
                 setIsSaving(false);
             }
