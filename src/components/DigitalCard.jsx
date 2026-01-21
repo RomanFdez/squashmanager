@@ -3,6 +3,7 @@ import './DigitalCard.css';
 import { getConfig } from '../services/ConfigService';
 
 const DigitalCard = ({ member }) => {
+    console.log(`[CardDebug] ${member.name} - Photo:`, member.photo);
     const config = getConfig();
     const logoSrc = config.appLogo || '/favicon.png'; // Corrected property name
     const primaryColor = config.primaryColor || '#931c1f';
