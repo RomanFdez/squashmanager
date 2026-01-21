@@ -110,6 +110,7 @@ export const saveMember = async (currentUser, memberData) => {
             .select();
 
         if (error) throw error;
+        if (!data || data.length === 0) throw new Error("La actualización no devolvió datos. Verifica permisos RLS.");
         result = data[0];
         action = AUDIT_ACTIONS.MEMBER_UPDATE;
     } else {
@@ -131,13 +132,16 @@ export const saveMember = async (currentUser, memberData) => {
             console.error('Supabase INSERT Error:', error);
             throw error;
         }
+        if (!data || data.length === 0) throw new Error("La creación no devolvió datos. Verifica permisos RLS.");
         result = data[0];
         action = AUDIT_ACTIONS.MEMBER_CREATE;
     }
 
     const savedMember = mapFromDb(result);
     // Audit is async, fire and forget (or await if critical)
-    await addAuditLog(currentUser, action, `Socio: ${savedMember.name} (#${savedMember.memberNumber})`);
+    if (currentUser) {
+        await addAuditLog(currentUser, action, `Socio: ${savedMember.name} (#${savedMember.memberNumber})`);
+    }
     return savedMember;
 };
 
