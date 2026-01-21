@@ -1,3 +1,4 @@
+import { supabase } from '../lib/supabaseClient';
 import React, { useState } from 'react';
 import { useAuth, ROLES } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
@@ -49,18 +50,14 @@ const Profile = () => {
         }
 
         try {
-            // Update member in storage
-            const updatedMember = { ...user, password: newPassword };
-            await saveMember(user, updatedMember); // Pass user (context) as first arg for audit log
-
-            // Update local user state
-            updateUser(updatedMember);
+            const { error } = await supabase.auth.updateUser({ password: newPassword });
+            if (error) throw error;
 
             setSuccessMessage('Contraseña actualizada correctamente');
             setPasswordData({ newPassword: '', confirmPassword: '' });
         } catch (err) {
             console.error(err);
-            setErrors({ submit: 'Error al actualizar la contraseña' });
+            setErrors({ submit: 'Error al actualizar la contraseña: ' + err.message });
         }
     };
 
