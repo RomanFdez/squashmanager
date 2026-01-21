@@ -37,13 +37,9 @@ const MemberForm = ({ member, onSave, onDelete, onRemove, onCancel }) => {
         photo: null,
         status: 'active',
         ...member,
-        password: '', // Always empty on edit for security
-        confirmPassword: ''
     });
 
     const [errors, setErrors] = useState({});
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [confirmDialog, setConfirmDialog] = useState({
         isOpen: false,
         title: '',
@@ -84,20 +80,7 @@ const MemberForm = ({ member, onSave, onDelete, onRemove, onCancel }) => {
         });
     };
 
-    const handleBlur = (e) => {
-        const { name } = e.target;
-        if (name === 'confirmPassword' || name === 'password') {
-            if (formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword) {
-                setErrors(prev => ({ ...prev, confirmPassword: 'Las contraseñas no coinciden' }));
-            } else {
-                setErrors(prev => {
-                    const newErrors = { ...prev };
-                    delete newErrors.confirmPassword;
-                    return newErrors;
-                });
-            }
-        }
-    };
+    // [Removed handleBlur]
 
     const validate = () => {
         const newErrors = {};
@@ -109,15 +92,7 @@ const MemberForm = ({ member, onSave, onDelete, onRemove, onCancel }) => {
             if (!/^\S+@\S+\.\S+$/.test(formData.email)) newErrors.email = 'Email no válido';
         }
 
-        // Password validation: required for new users, optional for updates (only if field has value), SKIPPED for Juniors
-        if (formData.type !== 'junior' && (!member?.id || formData.password)) {
-            if (!validatePassword(formData.password)) {
-                newErrors.password = 'Mínimo 8 caracteres, una mayúscula, un número y un símbolo';
-            }
-            if (formData.password !== formData.confirmPassword) {
-                newErrors.confirmPassword = 'Las contraseñas no coinciden';
-            }
-        }
+        // [Removed password validation]
 
         // Junior validation
         if (formData.type === 'junior') {
@@ -372,54 +347,7 @@ const MemberForm = ({ member, onSave, onDelete, onRemove, onCancel }) => {
                         <textarea name="address" value={formData.address} onChange={handleChange} rows="2" />
                     </div>
 
-                    {formData.type !== 'junior' && (
-                        <>
-                            <div className="form-group">
-                                <label>Contraseña{member?.id ? ' (Opcional)' : '*'}</label>
-                                <div className="password-input-wrapper">
-                                    <input
-                                        type={showPassword ? 'text' : 'password'}
-                                        name="password"
-                                        value={formData.password}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        className={errors.password ? 'error' : ''}
-                                        placeholder={member?.id ? 'Dejar en blanco para no cambiar' : ''}
-                                    />
-                                    <button
-                                        type="button"
-                                        className="password-toggle"
-                                        onClick={() => setShowPassword(!showPassword)}
-                                    >
-                                        {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                                    </button>
-                                </div>
-                                {errors.password && <span className="error-text">{errors.password}</span>}
-                            </div>
-                            <div className="form-group">
-                                <label>Repetir Contraseña{member?.id ? ' (Opcional)' : '*'}</label>
-                                <div className="password-input-wrapper">
-                                    <input
-                                        type={showConfirmPassword ? 'text' : 'password'}
-                                        name="confirmPassword"
-                                        value={formData.confirmPassword}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        className={errors.confirmPassword ? 'error' : ''}
-                                        placeholder={member?.id ? 'Dejar en blanco para no cambiar' : ''}
-                                    />
-                                    <button
-                                        type="button"
-                                        className="password-toggle"
-                                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                    >
-                                        {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                                    </button>
-                                </div>
-                                {errors.confirmPassword && <span className="error-text">{errors.confirmPassword}</span>}
-                            </div>
-                        </>
-                    )}
+// [Removed password block]
 
                     <div className="form-group">
                         <label>Fecha de Alta</label>

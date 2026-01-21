@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getMembers } from '../services/MemberService';
+import { supabase } from '../lib/supabaseClient';
 
 const AuthContext = createContext();
 
@@ -16,64 +16,109 @@ export const ROLES = {
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-    // Initialize from localStorage if available
-    const [user, setUser] = useState(() => {
-        const savedUser = localStorage.getItem('currentUser');
-        return savedUser ? JSON.parse(savedUser) : null;
-    });
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        if (user) {
-            localStorage.setItem('currentUser', JSON.stringify(user));
+        // Check active session
+        supabase.auth.getSession().then(({ data: { session } }) => {
+            updateUserFromSession(session);
+        });
+
+        // Listen for changes
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+            updateUserFromSession(session);
+        });
+
+        return () => subscription.unsubscribe();
+    }, []);
+
+    const updateUserFromSession = async (session) => {
+        if (!session?.user) {
+            setUser(null);
+            setLoading(false);
+            return;
+        }
+
+        const email = session.user.email;
+
+        // Base user structure
+        let userData = {
+            id: session.user.id, // Auth ID
+            email: email,
+            role: ROLES.SOCIO, // Default fallback
+            name: email.split('@')[0], // Default fallback
+            auth_id: session.user.id
+        };
+
+        // 1. Check if it's the Super Admin (System Admin)
+        if (email === 'admin@squashciudadmurcia.com' || email === 'admin') {
+            userData = {
+                ...userData,
+                id: 'admin_sys', // Maintain legacy ID if needed or use auth_id
+                name: 'Administrador del Sistema',
+                role: ROLES.ADMIN,
+                isSuperAdmin: true
+            };
         } else {
-            localStorage.removeItem('currentUser');
-        }
-    }, [user]);
+            // 2. Fetch from Members table to get Real Name and Role
+            try {
+                // We assume email is unique in members table
+                const { data: member, error } = await supabase
+                    .from('members')
+                    .select('*')
+                    .eq('email', email)
+                    .limit(1)
+                    .maybeSingle();
 
-    const adminUser = {
-        id: 'admin_sys',
-        name: 'Administrador del Sistema',
-        role: ROLES.ADMIN,
-        email: 'admin'
-    };
-
-    const login = async (emailOrUser, password) => {
-        // 1. Check Admin
-        if ((emailOrUser === 'admin' || emailOrUser === 'admin@squashciudadmurcia.com') && password === 'Clavecita1!') {
-            setUser(adminUser);
-            return true;
-        }
-
-        // 2. Check Members
-        try {
-            const members = await getMembers();
-            const member = members.find(m =>
-                (m.email === emailOrUser || m.memberNumber === emailOrUser) &&
-                m.status !== 'inactive' // Only active members
-            );
-
-            if (member) {
-                // Verify password
-                // In a real app, hash checking. Here direct comparison.
-                if (member.password === password) {
-                    setUser(member);
-                    return true;
+                if (member) {
+                    // Merge Auth data with Member Data
+                    // Member data takes precedence for Name/Role
+                    userData = {
+                        ...userData,
+                        ...member,
+                        // Ensure ID is consistent. Maybe we want member.id (database ID) or user.id (auth ID).
+                        // Let's keep member.id as primary ID for app logic, but store auth_id too.
+                        auth_id: session.user.id
+                    };
                 }
+            } catch (err) {
+                console.error("Error fetching member details for auth:", err);
             }
-        } catch (error) {
-            console.error("Login verification failed", error);
         }
 
-        return false;
+        setUser(userData);
+        setLoading(false);
     };
 
-    const logout = () => setUser(null);
+    const login = async (email, password) => {
+        try {
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email,
+                password,
+            });
+
+            if (error) {
+                console.error("Supabase Login Error:", error.message);
+                alert("Error de inicio de sesión: " + (error.message === 'Invalid login credentials' ? 'Credenciales incorrectas' : error.message));
+                return false;
+            }
+            return true;
+        } catch (err) {
+            console.error("Login unexpected error:", err);
+            return false;
+        }
+    };
+
+    const logout = async () => {
+        await supabase.auth.signOut();
+        setUser(null);
+    };
 
     // Permission Logic
-    // Admin has full access
     const isSuperAdmin = user?.role === ROLES.ADMIN;
 
-    // Roles with Admin-like privileges
+    // Roles with Admin-like privileges (Board Members)
     const adminRoles = [ROLES.PRESIDENTE, ROLES.SECRETARIO, ROLES.TESORERO];
 
     const isAdmin = isSuperAdmin || adminRoles.includes(user?.role);
@@ -84,11 +129,12 @@ export const AuthProvider = ({ children }) => {
     // Access Treasury: Admin + AdminRoles + Vocal
     const canAccessTreasury = isAdmin || user?.role === ROLES.VOCAL;
 
-    const updateUser = (userData) => setUser(userData);
+    const updateUser = (data) => setUser({ ...user, ...data });
 
     return (
         <AuthContext.Provider value={{
             user,
+            loading,
             login,
             logout,
             updateUser,
@@ -97,7 +143,7 @@ export const AuthProvider = ({ children }) => {
             isAdmin,
             ROLES
         }}>
-            {children}
+            {!loading && children}
         </AuthContext.Provider>
     );
 };
