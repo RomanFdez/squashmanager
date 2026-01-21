@@ -70,10 +70,6 @@ export const getMembers = async () => {
         return [];
     }
 
-    if (data && data.length > 0) {
-        console.log('[ServiceDebug] Sample Raw Member:', data[0]);
-    }
-
     return data.map(mapFromDb);
 };
 
