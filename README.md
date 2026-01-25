@@ -8,7 +8,6 @@ Sistema de gestión de socios y tesorería para clubs de squash.
 - **Backend**: Supabase (PostgreSQL + Auth + Storage)
 - **Hosting**: Cloudflare Pages
 - **Analytics**: PostHog
-- **Icons**: Lucide React
 
 ## 📋 Características
 
@@ -22,43 +21,33 @@ Sistema de gestión de socios y tesorería para clubs de squash.
 
 ## 🚀 Desarrollo Local
 
-1. Clona el repositorio:
 ```bash
+# Clonar e instalar
 git clone https://github.com/RomanFdez/squashmanager.git
 cd squashmanager
-```
-
-2. Instala dependencias:
-```bash
 npm install
-```
 
-3. Configura las variables de entorno:
-```bash
+# Configurar variables de entorno
 cp .env.example .env
 # Edita .env con tus credenciales de Supabase
-```
 
-4. Inicia el servidor de desarrollo:
-```bash
+# Iniciar servidor de desarrollo
 npm run dev
 ```
 
-## 📁 Estructura del Proyecto
+## 📁 Estructura
 
 ```
 ├── src/
-│   ├── components/     # Componentes React reutilizables
-│   ├── pages/          # Páginas de la aplicación
-│   ├── services/       # Servicios para Supabase
-│   ├── context/        # Context providers (Auth, Theme, Club)
+│   ├── components/     # Componentes React
+│   ├── pages/          # Páginas de la app
+│   ├── services/       # Servicios Supabase
+│   ├── context/        # Auth, Theme, Club providers
 │   ├── hooks/          # Custom hooks
-│   ├── lib/            # Cliente de Supabase
-│   └── utils/          # Utilidades
-├── sql/                # Scripts SQL para Supabase
-├── scripts/            # Scripts de migración y diagnóstico
+│   └── lib/            # Cliente Supabase
+├── sql/SCHEMA.sql      # Esquema completo de BD
 ├── public/             # Assets estáticos
-└── wrangler.json       # Configuración Cloudflare Pages
+└── wrangler.json       # Config Cloudflare
 ```
 
 ## 🔐 Variables de Entorno
@@ -68,11 +57,6 @@ VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
-## 📖 Documentación Adicional
-
-- [ROADMAP.md](./ROADMAP.md) - Funcionalidades planificadas
-- [sql/SUPABASE_SCHEMA.sql](./sql/SUPABASE_SCHEMA.sql) - Esquema de base de datos
-
 ## 📄 Licencia
 
-Este proyecto está bajo la licencia incluida en [LICENSE](./LICENSE).
+[LICENSE](./LICENSE)
