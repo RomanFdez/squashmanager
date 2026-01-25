@@ -107,6 +107,13 @@ export const AuthProvider = ({ children }) => {
                 alert("Error de inicio de sesión: " + (error.message === 'Invalid login credentials' ? 'Credenciales incorrectas' : error.message));
                 return false;
             }
+
+            // Esperar a que el usuario se cargue completamente antes de retornar
+            // Esto evita la race condition donde navigate() se ejecuta antes de que user esté listo
+            if (data?.session) {
+                await updateUserFromSession(data.session);
+            }
+
             return true;
         } catch (err) {
             console.error("Login unexpected error:", err);
