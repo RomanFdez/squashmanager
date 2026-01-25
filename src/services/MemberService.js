@@ -119,10 +119,6 @@ export const saveMember = async (currentUser, memberData) => {
             dataToSave.member_number = await getNextMemberNumber();
         }
 
-        // Ensure we are not sending undefined fields that might fail if column missing
-        // For debugging, console log what we are sending
-        console.log('Sending to Supabase:', dataToSave);
-
         const { data, error } = await supabase
             .from('members')
             .insert(dataToSave)
