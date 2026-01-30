@@ -3,7 +3,7 @@ import { getMembers, saveMember, deleteMember, removeMember } from '../services/
 import { useAuth } from '../context/AuthContext';
 import { Pencil, Download, Mail } from 'lucide-react';
 import MemberCard from '../components/MemberCard';
-import { exportToCSV } from '../services/ExportService';
+import { exportToExcel } from '../services/ExportService';
 import MemberForm from '../components/MemberForm';
 import { getConfig } from '../services/ConfigService';
 import './MemberList.css';
@@ -109,7 +109,7 @@ const MemberList = () => {
             Categoria: m.type,
             Pagado: m.isPaid ? 'SI' : 'NO'
         }));
-        exportToCSV(exportData, 'socios_squash');
+        exportToExcel(exportData, 'socios_squash');
     };
 
     const handleSendEmail = (e, member) => {
@@ -169,6 +169,7 @@ const MemberList = () => {
 
                 <button className="btn btn-secondary" onClick={handleExport} style={{ marginRight: '10px', display: 'flex', alignItems: 'center', gap: '5px', padding: '8px' }}>
                     <Download size={18} />
+                    <span>Excel</span>
                 </button>
 
                 {canManageMembers && (

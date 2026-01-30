@@ -3,7 +3,7 @@ import { getMovements, saveMovement, deleteMovement, calculateTotals } from '../
 import { useAuth } from '../context/AuthContext';
 import { Pencil, Trash2, Download } from 'lucide-react';
 import MovementForm from '../components/MovementForm';
-import { exportToCSV } from '../services/ExportService';
+import { exportToExcel } from '../services/ExportService';
 import './Treasury.css';
 
 const Treasury = () => {
@@ -72,7 +72,7 @@ const Treasury = () => {
             Cantidad: m.amount,
             Categoria: m.category || ''
         }));
-        exportToCSV(exportData, `tesoreria_${year}`);
+        exportToExcel(exportData, `tesoreria_${year}`);
     };
 
     return (
@@ -199,6 +199,7 @@ const Treasury = () => {
                                     <div style={{ display: 'flex', gap: '8px' }}>
                                         <button className="btn btn-secondary" onClick={handleExport} style={{ display: 'flex', alignItems: 'center', gap: '5px', padding: '8px' }}>
                                             <Download size={18} />
+                                            <span>Excel</span>
                                         </button>
                                         <button className="btn btn-primary" onClick={() => setIsAdding(true)}>
                                             + Nuevo Movimiento
