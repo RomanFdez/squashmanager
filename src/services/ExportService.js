@@ -19,4 +19,3 @@ export const exportToExcel = (data, filename) => {
     // XLSX.writeFile will handle the file creation and download in most browsers
     XLSX.writeFile(wb, `${filename}.xlsx`);
 };
-
