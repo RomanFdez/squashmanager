@@ -247,6 +247,34 @@
     background: rgba(var(--accent-rgb), 0.05);
 }
 
+/* Floating Action Button */
+.add-player-fab {
+    display: none;
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    z-index: 100;
+    transition: all 0.3s ease;
+}
+
+.add-player-fab:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+}
+
+.add-player-fab:active {
+    transform: scale(0.95);
+}
+
 /* Add Player Panel */
 .add-player-panel {
     background: var(--bg-secondary);
@@ -540,5 +568,16 @@
 
     .external-form .form-row {
         grid-template-columns: 1fr;
+    }
+
+    /* Show FAB, hide regular button on mobile */
+    .add-player-fab {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .add-player-btn {
+        display: none;
     }
 }

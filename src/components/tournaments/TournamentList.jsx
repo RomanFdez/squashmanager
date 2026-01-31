@@ -133,19 +133,15 @@ const TournamentList = ({ tournaments, onEdit, onDelete, onViewBrackets }) => {
                     )}
 
                     <div className="tournament-card-actions">
-                        {canEdit(tournament) && (
-                            <button className="btn-secondary" onClick={() => onEdit(tournament)}>
-                                ✏️ Editar
-                            </button>
-                        )}
+                        <button className="btn-secondary" onClick={() => onEdit(tournament)}>
+                            ✏️ Editar
+                        </button>
                         <button className="btn-secondary" onClick={() => onViewBrackets(tournament)}>
                             📊 Ver Cuadros
                         </button>
-                        {canEdit(tournament) && (
-                            <button className="btn-danger" onClick={() => onDelete(tournament)}>
-                                🗑️ Eliminar
-                            </button>
-                        )}
+                        <button className="btn-danger" onClick={() => onDelete(tournament)}>
+                            🗑️ Eliminar
+                        </button>
                         <a
                             href={`/torneo/${tournament.public_slug || tournament.id}`}
                             target="_blank"

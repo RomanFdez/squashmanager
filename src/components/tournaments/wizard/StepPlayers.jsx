@@ -241,12 +241,20 @@ const StepPlayers = ({ tournamentData, updateData, tournamentId }) => {
                                     </div>
                                 )}
 
+                                {/* Regular Add Button - visible on desktop */}
                                 {!showAddForm && (
                                     <button className="add-player-btn" onClick={() => setShowAddForm(true)}>
                                         ➕ Añadir Jugador
                                     </button>
                                 )}
                             </div>
+
+                            {/* Floating Add Button - visible on mobile */}
+                            {!showAddForm && (
+                                <button className="add-player-fab" onClick={() => setShowAddForm(true)}>
+                                    ➕
+                                </button>
+                            )}
 
                             {/* Add Player Form */}
                             {showAddForm && (

@@ -370,9 +370,9 @@ const TournamentBracketView = ({ tournament, onBack, onUpdate, isPublicView = fa
 
         let classifLabel = '';
         if (bracket.name === 'Puestos 3-4' && match.position === 1) {
-            classifLabel = '3º Y 4º PUESTO';
+            classifLabel = '3º-4º Puesto';
         } else if (bracket.bracket_type === 'main' && match.round === 1 && match.position === 1) {
-            classifLabel = 'FINAL - 1º Y 2º PUESTO';
+            classifLabel = '1º-2º Puesto (Final)';
         } else if (bracket.bracket_type !== 'main' && bracket.name !== 'Puestos 3-4' && match.round === 1) {
             // Extract range numbers from bracket name, e.g., "Puestos 5-8" -> [5, 8]
             // Usually the final of "5-8" decides 5th and 6th. "9-16" final decides 9th and 10th.
@@ -381,9 +381,9 @@ const TournamentBracketView = ({ tournament, onBack, onUpdate, isPublicView = fa
                 const start = parseInt(rangeMatch[1]);
                 // If the bracket is for positions X-Y, the winner is X, loser is X+1 (typically)
                 // e.g. 5-8 -> Final Winner is 5th, Loser is 6th.
-                classifLabel = `${start}º Y ${start + 1}º PUESTO`;
+                classifLabel = `${start}º-${start + 1}º Puesto`;
             } else {
-                classifLabel = `GANADOR ${bracket.name.toUpperCase()}`;
+                classifLabel = `Ganador ${bracket.name}`;
             }
         }
 

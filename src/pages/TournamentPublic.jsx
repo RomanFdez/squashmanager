@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import * as TournamentService from '../services/TournamentService';
 import TournamentBracketView from '../components/tournaments/TournamentBracketView';
 import './TournamentPublic.css';
@@ -54,6 +54,17 @@ const TournamentPublic = () => {
 
     return (
         <div className="tournament-public-page">
+            <header className="public-page-header">
+                <div className="header-content">
+                    <Link to="/" className="header-logo">
+                        <span className="logo-icon">🏸</span>
+                        <span className="logo-text">CDS Ciudad Murcia</span>
+                    </Link>
+                    <Link to="/login" className="header-login-btn">
+                        🔐 Iniciar Sesión
+                    </Link>
+                </div>
+            </header>
             <div className="public-container">
                 <TournamentBracketView
                     tournament={tournament}

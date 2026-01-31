@@ -2,13 +2,72 @@
     min-height: 100vh;
     background: var(--bg-color);
     color: var(--text-color);
+    overflow-x: hidden;
+    width: 100%;
+}
+
+/* Public Page Header */
+.public-page-header {
+    background: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.75rem 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+}
+
+.public-page-header .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.public-page-header .header-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+.public-page-header .logo-icon {
+    font-size: 1.5rem;
+}
+
+.public-page-header .logo-text {
+    font-size: 1rem;
+}
+
+.public-page-header .header-login-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    background: var(--primary-color);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.public-page-header .header-login-btn:hover {
+    background: var(--primary-color-dark);
+    transform: translateY(-1px);
 }
 
 .public-container {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 1.5rem;
+    box-sizing: border-box;
+    overflow-x: auto;
 }
 
 /* Public Header */
@@ -260,7 +319,16 @@
 
 @media (max-width: 768px) {
     .public-container {
-        padding: 1rem;
+        padding: 0.75rem;
+    }
+
+    .public-page-header .logo-text {
+        display: none;
+    }
+
+    .public-page-header .header-login-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
     }
 
     .public-header h1 {
@@ -283,5 +351,16 @@
     .cat-info {
         flex-direction: column;
         gap: 0.5rem;
+    }
+}
+
+/* Extra small screens */
+@media (max-width: 480px) {
+    .public-container {
+        padding: 0.5rem;
+    }
+
+    .public-page-header {
+        padding: 0.5rem;
     }
 }

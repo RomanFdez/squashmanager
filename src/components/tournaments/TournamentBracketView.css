@@ -687,7 +687,29 @@
     }
 
     .brackets-container {
-        padding: 1rem;
+        padding: 0.5rem;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .bracket-view {
+        min-width: 500px;
+    }
+
+    .bracket-round {
+        min-width: 140px;
+    }
+
+    .match-card {
+        min-width: 130px;
+    }
+
+    .player-slot {
+        padding: 6px 8px;
+    }
+
+    .player-name {
+        font-size: 0.75rem;
     }
 
     .score-modal {
@@ -719,17 +741,18 @@
 }
 
 .classification-label {
-    position: absolute;
-    bottom: -18px;
-    left: 0;
-    right: 0;
+    display: block;
+    width: 100%;
     text-align: center;
-    font-size: 0.65rem;
+    font-size: 0.7rem;
     font-weight: 700;
-    color: var(--text-color-light);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    pointer-events: none;
+    color: var(--accent-color);
+    text-transform: none;
+    letter-spacing: 0.3px;
+    margin-top: 6px;
+    padding: 4px 8px;
+    background: rgba(var(--accent-rgb, 255, 193, 7), 0.15);
+    border-radius: 4px;
 }
 
 /* Ensure round-matches has enough bottom padding for the labels */
