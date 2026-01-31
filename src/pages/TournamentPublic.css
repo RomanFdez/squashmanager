@@ -14,7 +14,6 @@
     position: sticky;
     top: 0;
     z-index: 100;
-    backdrop-filter: blur(10px);
 }
 
 .public-page-header .header-content {
@@ -40,18 +39,23 @@
     align-items: center;
     gap: 0.3rem;
     padding: 0.35rem 0.65rem;
-    background: var(--primary-color);
-    color: white;
+    background-color: var(--primary-color);
+    color: white !important;
     text-decoration: none;
     border-radius: 6px;
     font-weight: 600;
     font-size: 0.75rem;
-    transition: all 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    transform: translateZ(0);
+    /* Force GPU render for mobile */
+    -webkit-font-smoothing: antialiased;
+    border: 1px solid var(--primary-color);
 }
 
 .public-page-header .header-login-btn:hover {
-    background: var(--primary-color-dark);
-    transform: translateY(-1px);
+    background-color: var(--primary-color-hover);
+    border-color: var(--primary-color-hover);
+    transform: translateY(-1px) translateZ(0);
 }
 
 .user-nav {
@@ -89,6 +93,7 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
+    transform: translateZ(0);
 }
 
 .header-logout-btn:hover {
