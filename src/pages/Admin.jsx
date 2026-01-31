@@ -23,7 +23,11 @@ const Admin = () => {
     });
 
     useEffect(() => {
-        setLogs(getAuditLogs());
+        const loadLogs = async () => {
+            const auditLogs = await getAuditLogs();
+            setLogs(auditLogs);
+        };
+        loadLogs();
     }, []);
 
     const handleResetPayments = () => {
@@ -33,9 +37,10 @@ const Admin = () => {
             message: '¿Estás seguro de que quieres marcar a TODOS los socios como pendientes de pago? Esta acción no se puede deshacer.',
             confirmText: 'Reiniciar Pagos',
             isDestructive: true,
-            onConfirm: () => {
-                resetPaymentStatus(user);
-                setLogs(getAuditLogs()); // Refresh logs
+            onConfirm: async () => {
+                await resetPaymentStatus(user);
+                const auditLogs = await getAuditLogs();
+                setLogs(auditLogs);
                 alert('Se han marcado todos los socios como pendientes de pago.');
                 setConfirmDialog(prev => ({ ...prev, isOpen: false }));
             }

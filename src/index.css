@@ -6,6 +6,8 @@
   --primary-color-hover: #7a171a;
   --secondary-color: #FFFFFF;
   --accent-color: #fbbf24;
+  --accent-dark: #d97706;
+  --accent-rgb: 251, 191, 36;
   --bg-color-alt: #F4F4F4;
   --text-color: #1D1D1D;
   --text-color-light: #666666;
@@ -149,24 +151,24 @@ textarea {
 }
 
 .btn-primary {
-  background-color: var(--primary-color);
-  color: white;
+  background-color: var(--primary-color) !important;
+  color: white !important;
 }
 
 .btn-primary:hover {
-  background-color: var(--primary-color-hover);
+  background-color: var(--primary-color-hover) !important;
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
 }
 
 .btn-secondary {
-  background-color: var(--bg-color-alt);
-  color: var(--text-color);
+  background-color: var(--bg-color-alt) !important;
+  color: var(--text-color) !important;
   border: 1px solid var(--border-color);
 }
 
 .btn-secondary:hover {
-  background-color: var(--border-color);
+  background-color: var(--border-color) !important;
 }
 
 /* Scrollbar Styles */

@@ -1,0 +1,323 @@
+/* ============================================================
+   STEP LOGOS STYLES
+   ============================================================ */
+
+.step-logos {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.logos-intro {
+    text-align: center;
+    padding: 1rem;
+}
+
+.logos-intro h3 {
+    font-size: 1.25rem;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.logos-intro p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* Slots Container */
+.slots-container {
+    background: var(--bg-secondary);
+    border-radius: 16px;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+}
+
+.slots-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 1rem;
+}
+
+/* Image Slot */
+.image-slot {
+    aspect-ratio: 1;
+    background: var(--bg-primary);
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-slot:hover {
+    border-color: var(--accent-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.image-slot.selected {
+    border-color: var(--accent-color);
+    border-style: solid;
+    box-shadow: 0 0 0 4px rgba(var(--accent-rgb), 0.2);
+}
+
+.image-slot.main-slot {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+.image-slot.has-image {
+    border-style: solid;
+    border-color: transparent;
+}
+
+.image-slot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.slot-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.image-slot:hover .slot-overlay {
+    opacity: 1;
+}
+
+.remove-image-btn {
+    background: rgba(239, 68, 68, 0.9);
+    color: white;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.remove-image-btn:hover {
+    transform: scale(1.1);
+    background: #ef4444;
+}
+
+.slot-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    text-align: center;
+}
+
+.slot-icon {
+    font-size: 2rem;
+    opacity: 0.5;
+}
+
+.main-slot .slot-icon {
+    font-size: 3rem;
+}
+
+.slot-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.main-slot .slot-label {
+    font-size: 0.85rem;
+}
+
+/* Image Picker Modal */
+.image-picker-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.image-picker-panel {
+    background: var(--bg-secondary, #ffffff);
+    border-radius: 16px;
+    padding: 1.5rem;
+    border: 1px solid var(--accent-color);
+    width: 90%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.picker-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.picker-header h4 {
+    font-size: 1rem;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.close-picker {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.25rem;
+    cursor: pointer;
+    padding: 0.25rem;
+    transition: color 0.3s ease;
+}
+
+.close-picker:hover {
+    color: var(--text-primary);
+}
+
+/* Upload Section */
+.upload-section {
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.upload-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 2rem;
+    background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-dark) 100%);
+    color: white;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.upload-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.4);
+}
+
+/* Existing Images */
+.existing-images h5 {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+.images-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 0.75rem;
+}
+
+.selectable-image {
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    position: relative;
+}
+
+.selectable-image:hover {
+    border-color: var(--accent-color);
+    transform: scale(1.05);
+}
+
+.selectable-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.selectable-image .image-name {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    font-size: 0.65rem;
+    padding: 0.25rem;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.no-images {
+    color: var(--text-secondary);
+    text-align: center;
+    padding: 2rem;
+    background: var(--bg-primary);
+    border-radius: 8px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .slots-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .image-slot.main-slot {
+        grid-column: span 3;
+        grid-row: span 1;
+        aspect-ratio: 16/9;
+    }
+
+    .images-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}

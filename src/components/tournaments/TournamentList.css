@@ -1,0 +1,17 @@
+/* TournamentList inherits most styles from Tournaments.css */
+
+.tournament-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.public-btn {
+    border-color: var(--accent-color) !important;
+    background: rgba(var(--accent-rgb), 0.05) !important;
+}
+
+.public-btn:hover {
+    background: var(--accent-color) !important;
+    color: white !important;
+}

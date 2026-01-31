@@ -1,0 +1,294 @@
+/* ============================================================
+   STEP CATEGORIES STYLES
+   ============================================================ */
+
+.step-categories {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.categories-intro {
+    text-align: center;
+    padding: 0.5rem;
+}
+
+.categories-intro h3 {
+    font-size: 1.1rem;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+}
+
+.categories-intro p {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+/* Categories List */
+.categories-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.empty-categories {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem 1rem;
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    border: 2px dashed var(--border-color);
+    text-align: center;
+}
+
+.empty-categories .icon {
+    font-size: 2rem;
+    opacity: 0.5;
+    margin-bottom: 0.5rem;
+}
+
+.empty-categories p {
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+}
+
+/* Category Card */
+.category-card {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.category-card:hover {
+    border-color: var(--accent-color);
+}
+
+.category-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+}
+
+.category-number {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    background: var(--bg-hover);
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+}
+
+.category-header h4 {
+    flex: 1;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.category-actions {
+    display: flex;
+    gap: 0.25rem;
+}
+
+.category-actions .btn-icon {
+    padding: 0.5rem;
+    border-radius: 8px;
+}
+
+.category-actions .btn-icon.danger:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
+.category-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.detail-item {
+    font-size: 0.85rem;
+    color: var(--text-primary);
+}
+
+.detail-item label {
+    color: var(--text-secondary);
+    margin-right: 0.25rem;
+}
+
+.detail-item.groups {
+    background: rgba(var(--accent-rgb), 0.1);
+    padding: 0.25rem 0.5rem;
+    border-radius: 6px;
+    color: var(--accent-color);
+}
+
+/* Add Category Button */
+.add-category-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: transparent;
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.add-category-btn:hover {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+    background: rgba(var(--accent-rgb), 0.05);
+}
+
+/* Category Form */
+.category-form {
+    background: var(--bg-secondary);
+    border-radius: 12px;
+    padding: 1rem;
+    border: 1px solid var(--accent-color);
+    animation: slideUp 0.3s ease;
+}
+
+.category-form h4 {
+    font-size: 1rem;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+}
+
+/* Type Selector */
+.type-selector {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.type-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--bg-primary);
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.type-option:hover {
+    border-color: var(--accent-color);
+}
+
+.type-option.selected {
+    border-color: var(--accent-color);
+    background: rgba(var(--accent-rgb), 0.1);
+}
+
+.type-option input {
+    display: none;
+}
+
+.type-option .icon {
+    font-size: 1.25rem;
+}
+
+/* Toggle Option */
+.form-section-divider {
+    padding: 1rem 0;
+    border-top: 1px solid var(--border-color);
+    margin-top: 1rem;
+}
+
+.toggle-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+
+.toggle-option input {
+    display: none;
+}
+
+.toggle-switch {
+    width: 48px;
+    height: 26px;
+    background: var(--border-color);
+    border-radius: 13px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.toggle-switch::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.toggle-option.active .toggle-switch {
+    background: var(--accent-color);
+}
+
+.toggle-option.active .toggle-switch::after {
+    left: 25px;
+}
+
+/* Group Phase Config */
+.group-phase-config {
+    background: var(--bg-primary);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-top: 1rem;
+    border: 1px solid var(--border-color);
+    animation: slideUp 0.3s ease;
+}
+
+.group-info {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(var(--accent-rgb), 0.05);
+    border-radius: 8px;
+}
+
+/* Form Actions */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .type-selector {
+        flex-direction: column;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+    .form-actions button {
+        width: 100%;
+    }
+}

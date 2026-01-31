@@ -7,8 +7,10 @@ import Layout from './components/Layout';
 import MemberList from './pages/MemberList';
 import Treasury from './pages/Treasury';
 import Admin from './pages/Admin';
+import Tournaments from './pages/Tournaments';
 import Profile from './pages/Profile';
 import Login from './Login';
+import TournamentPublic from './pages/TournamentPublic';
 import ProtectedRoute from './components/ProtectedRoute';
 import { useDynamicIcons } from './hooks/useDynamicIcons';
 
@@ -22,6 +24,7 @@ function App() {
           <AuthProvider>
             <Routes>
               <Route path="/login" element={<Login />} />
+              <Route path="/torneo/:slug" element={<TournamentPublic />} />
 
               <Route path="/" element={
                 <ProtectedRoute>
@@ -38,6 +41,11 @@ function App() {
                 <Route path="admin" element={
                   <ProtectedRoute requireAdmin={true}>
                     <Admin />
+                  </ProtectedRoute>
+                } />
+                <Route path="tournaments" element={
+                  <ProtectedRoute requireAdmin={true}>
+                    <Tournaments />
                   </ProtectedRoute>
                 } />
                 <Route path="profile" element={<Profile />} />

@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
-import { Users, Landmark, Settings, User, Sun, Moon, LogOut } from 'lucide-react';
+import { Users, Landmark, Settings, User, Sun, Moon, LogOut, Trophy } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
 import './Layout.css';
@@ -54,6 +54,13 @@ const Layout = () => {
                     <NavLink to="/treasury" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
                         <span className="nav-icon"><Landmark size={24} /></span>
                         <span className="nav-label">Tesorería</span>
+                    </NavLink>
+                )}
+
+                {isAdmin && (
+                    <NavLink to="/tournaments" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+                        <span className="nav-icon"><Trophy size={24} /></span>
+                        <span className="nav-label">Torneos</span>
                     </NavLink>
                 )}
 

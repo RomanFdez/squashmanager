@@ -64,9 +64,14 @@
 .content {
     flex: 1;
     padding: var(--spacing-md);
-    max-width: 800px;
-    margin: 0 auto;
     width: 100%;
+}
+
+/* Standard pages are centered and limited, but complex views like brackets can use 100% */
+.content>div:not(.full-width):not(.bracket-view-page) {
+    max-width: 1000px;
+    /* Aumentado de 800 para dar un poco más de aire */
+    margin: 0 auto;
 }
 
 .bottom-nav {

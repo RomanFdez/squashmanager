@@ -1,4 +1,5 @@
-import { getStorageItem, setStorageItem } from './StorageService';
+import { supabase } from '../lib/supabaseClient';
+import { getClubId } from './ConfigService';
 
 export const AUDIT_ACTIONS = {
     MEMBER_CREATE: 'alta_socio',
@@ -9,21 +10,43 @@ export const AUDIT_ACTIONS = {
     TREASURY_DELETE: 'borrado_movimiento'
 };
 
-const STORAGE_KEY = 'club_audit_logs';
+export const getAuditLogs = async () => {
+    const clubId = getClubId();
+    const { data, error } = await supabase
+        .from('audit_logs')
+        .select('*')
+        .eq('club_id', clubId)
+        .order('timestamp', { ascending: false })
+        .limit(100); // Limitar a los últimos 100 registros
 
-export const getAuditLogs = () => {
-    const logs = getStorageItem(STORAGE_KEY);
-    return logs ? JSON.parse(logs) : [];
+    if (error) {
+        console.error('Error fetching audit logs:', error);
+        return [];
+    }
+
+    // Mapear campos de la BD al formato esperado por la UI
+    return data.map(log => ({
+        id: log.id,
+        timestamp: log.timestamp,
+        user: log.user_name,
+        action: log.action,
+        details: log.details
+    }));
 };
 
-export const addAuditLog = (user, action, details) => {
-    const logs = getAuditLogs();
-    const newLog = {
-        id: Date.now(),
-        timestamp: new Date().toISOString(),
-        user: user?.name || 'Sistema',
-        action,
-        details
-    };
-    setStorageItem(STORAGE_KEY, JSON.stringify([newLog, ...logs]));
+export const addAuditLog = async (user, action, details) => {
+    const clubId = getClubId();
+
+    const { error } = await supabase
+        .from('audit_logs')
+        .insert({
+            club_id: clubId,
+            user_name: user?.name || 'Sistema',
+            action,
+            details
+        });
+
+    if (error) {
+        console.error('Error adding audit log:', error);
+    }
 };
