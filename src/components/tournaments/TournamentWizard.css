@@ -6,13 +6,14 @@
     background: var(--bg-color);
     border-radius: 16px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-    overflow: hidden;
     max-width: 1000px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     height: 90vh;
     position: relative;
+    overflow: hidden;
+    /* We'll control internal scroll */
 }
 
 /* Header */
@@ -138,10 +139,15 @@
 .wizard-content {
     flex: 1;
     padding: 1.25rem 1.5rem;
-    padding-bottom: 80px;
-    /* Extra space so content isn't covered by nav */
+    padding-bottom: 100px;
+    /* More space for the nav */
     overflow-y: auto;
+    overflow-x: hidden;
     position: relative;
+    -webkit-overflow-scrolling: touch;
+    /* Smooth scroll for iOS */
+    touch-action: pan-y;
+    /* Optimize for vertical scroll */
 }
 
 /* Navigation */
@@ -437,17 +443,19 @@
     }
 
     .step-circle {
-        width: 40px;
-        height: 40px;
-        font-size: 1rem;
+        width: 44px;
+        height: 44px;
+        font-size: 1.1rem;
+        flex-shrink: 0;
     }
 
     .step-name {
-        font-size: 0.7rem;
+        font-size: 0.65rem;
+        margin-top: 0.4rem;
         white-space: nowrap;
     }
 
-    .wizard-content {
+    .wizard-navigation {
         padding: 1rem;
     }
 
