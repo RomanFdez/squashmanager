@@ -799,34 +799,12 @@ const TournamentBracketView = ({ tournament, onBack, onUpdate, isPublicView = fa
 
     return (
         <div className="bracket-view-page">
-            <div className="bracket-header">
+            <div className="category-tabs-scrollable">
                 {onBack && (
                     <button className="btn-back" onClick={onBack}>
                         ← Volver
                     </button>
                 )}
-                <div className="tournament-info">
-                    <h1>🏆 {tournament?.name || 'Torneo'}</h1>
-                    <span className="tournament-dates">
-                        {tournament?.start_date ? new Date(tournament.start_date).toLocaleDateString('es-ES') : ''} -
-                        {tournament?.end_date ? new Date(tournament.end_date).toLocaleDateString('es-ES') : ''}
-                    </span>
-                </div>
-                <div className="header-actions">
-                    {!isPublicView && tournament?.public_slug && (
-                        <a
-                            href={`/torneo/${tournament.public_slug}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="public-link-btn"
-                        >
-                            🔗 Ver Pública
-                        </a>
-                    )}
-                </div>
-            </div>
-
-            <div className="category-tabs-scrollable">
                 <div className="category-tabs">
                     <button
                         className={`category-tab info-tab ${activeTab === 'info' ? 'active' : ''}`}
@@ -845,16 +823,28 @@ const TournamentBracketView = ({ tournament, onBack, onUpdate, isPublicView = fa
                         </button>
                     ))}
                 </div>
-                {activeTab !== 'info' && (
-                    <label className="detailed-score-toggle">
-                        <input
-                            type="checkbox"
-                            checked={showDetailedScore}
-                            onChange={(e) => setShowDetailedScore(e.target.checked)}
-                        />
-                        <span className="toggle-label">Ver puntuaciones completas</span>
-                    </label>
-                )}
+                <div className="tabs-right-actions">
+                    {activeTab !== 'info' && (
+                        <label className="detailed-score-toggle">
+                            <input
+                                type="checkbox"
+                                checked={showDetailedScore}
+                                onChange={(e) => setShowDetailedScore(e.target.checked)}
+                            />
+                            <span className="toggle-label">Ver puntuaciones completas</span>
+                        </label>
+                    )}
+                    {!isPublicView && tournament?.public_slug && (
+                        <a
+                            href={`/torneo/${tournament.public_slug}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="public-link-btn"
+                        >
+                            🔗 Ver Pública
+                        </a>
+                    )}
+                </div>
             </div>
 
             {renderTournamentContent()}
