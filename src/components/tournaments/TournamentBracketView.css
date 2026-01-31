@@ -150,8 +150,8 @@
 .category-tab {
     padding: 0.4rem 0.8rem;
     border-radius: 8px;
-    border: none;
-    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: transparent;
     color: white;
     font-size: 0.8rem;
     font-weight: 600;
@@ -165,12 +165,13 @@
 
 .category-tab.active {
     background: var(--accent-color);
+    border-color: var(--accent-color);
     color: var(--primary-color);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .category-tab.info-tab {
-    background: rgba(255, 255, 255, 0.1);
+    background: transparent;
 }
 
 .category-tab.info-tab.active {
@@ -190,10 +191,10 @@
     gap: 0.35rem;
     cursor: pointer;
     padding: 0.4rem 0.6rem;
-    background: rgba(255, 255, 255, 0.1);
+    background: transparent;
     border-radius: 6px;
     color: white;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .detailed-score-toggle .toggle-label {
