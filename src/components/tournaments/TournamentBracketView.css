@@ -140,7 +140,11 @@
     flex: 1;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    padding: 0.25rem 0;
+    padding: 0;
+    background: transparent !important;
+    border-radius: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
 .category-tabs::-webkit-scrollbar {
