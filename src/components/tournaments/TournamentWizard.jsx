@@ -60,6 +60,15 @@ const TournamentWizard = ({ tournament, onComplete, onCancel }) => {
         }
     }, [tournament]);
 
+    // Prevent body scroll when wizard is open (especially useful for fixed mobile view)
+    useEffect(() => {
+        const originalStyle = window.getComputedStyle(document.body).overflow;
+        document.body.style.overflow = 'hidden';
+        return () => {
+            document.body.style.overflow = originalStyle;
+        };
+    }, []);
+
     // Handle step change scroll and reset nav visibility
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });

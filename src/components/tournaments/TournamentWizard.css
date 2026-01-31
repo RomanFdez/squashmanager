@@ -428,14 +428,20 @@
 
 @media (max-width: 768px) {
     .tournament-wizard {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1000;
         border-radius: 0;
-        height: 100vh;
-        /* Full screen on mobile */
+        margin: 0;
     }
 
     .wizard-steps {
         padding: 0.75rem;
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     .wizard-step {
