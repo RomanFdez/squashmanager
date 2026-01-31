@@ -536,52 +536,46 @@ const TournamentBracketView = ({ tournament, onBack, onUpdate, isPublicView = fa
                         {/* Poster and Sponsors Section */}
 
 
-                        <div className="info-top-row" style={{ display: 'flex', gap: '2rem', marginBottom: '2rem' }}>
-                            <div className="info-section" style={{ flex: 1, margin: 0 }}>
+                        <div className="info-top-row">
+                            <div className="info-section details-section">
                                 <h3>📅 Detalles del Torneo</h3>
-                                <div className="info-items">
+                                <div className="info-items-grid">
                                     <div className="info-item">
-                                        <span className="label">Ubicación</span>
-                                        <span className="value">{tournament.location || 'CD Ciudad de Murcia'}</span>
+                                        <span className="label">UBICACIÓN</span>
+                                        <span className="value">{tournament.location || 'Palacio de los deportes'}</span>
                                     </div>
                                     <div className="info-item">
-                                        <span className="label">Formato</span>
+                                        <span className="label">FORMATO</span>
                                         <span className="value">Al mejor de {matchFormat} sets</span>
                                     </div>
 
                                     <div className="info-item">
-                                        <span className="label">Inicio</span>
+                                        <span className="label">INICIO</span>
                                         <span className="value">{formatDate(tournament.start_date)}</span>
                                     </div>
                                     <div className="info-item">
-                                        <span className="label">Fin</span>
+                                        <span className="label">FIN</span>
                                         <span className="value">{formatDate(tournament.end_date)}</span>
                                     </div>
                                     <div className="info-item">
-                                        <span className="label">Cierre Inscripciones</span>
+                                        <span className="label">CIERRE INSCRIPCIONES</span>
                                         <span className="value">{formatDate(tournament.registration_deadline)}</span>
                                     </div>
                                     <div className="info-item">
-                                        <span className="label">Precio</span>
+                                        <span className="label">PRECIO</span>
                                         <span className="value">{tournament.price ? `${tournament.price}€` : 'Gratis'}</span>
                                     </div>
                                 </div>
                             </div>
 
-                            {/* Club Logo Block - Side by Side */}
+                            {/* Club Logo Block */}
                             {tournament.tournament_images?.find(img => img.slot_number === 2) && (
-                                <div className="info-section" style={{ width: '150px', flexShrink: 0, margin: 0, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                    <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f5f5f5', borderRadius: '8px', overflow: 'hidden', padding: '1rem' }}>
+                                <div className="info-section logo-section">
+                                    <div className="club-logo-wrapper">
                                         <img
                                             src={tournament.tournament_images.find(img => img.slot_number === 2).club_image.image_url}
                                             alt="Logo del Club"
-                                            className="club-logo"
-                                            style={{
-                                                maxWidth: '120px',
-                                                width: '100%',
-                                                height: 'auto',
-                                                objectFit: 'contain'
-                                            }}
+                                            className="club-logo-img"
                                         />
                                     </div>
                                 </div>
@@ -612,7 +606,7 @@ const TournamentBracketView = ({ tournament, onBack, onUpdate, isPublicView = fa
                                                 placeholder="Ej: Juan Pérez"
                                             />
                                         </div>
-                                        <div className="form-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                        <div className="form-row-grid">
                                             <div className="form-group">
                                                 <label>Email *</label>
                                                 <input
