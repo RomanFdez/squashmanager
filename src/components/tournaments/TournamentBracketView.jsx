@@ -810,7 +810,7 @@ const TournamentBracketView = ({ tournament, onBack, onUpdate, isPublicView = fa
                         className={`category-tab info-tab ${activeTab === 'info' ? 'active' : ''}`}
                         onClick={() => setActiveTab('info')}
                     >
-                        ℹ️ Información
+                        ℹ️ Info
                     </button>
                     {categories.map(cat => (
                         <button
@@ -823,28 +823,26 @@ const TournamentBracketView = ({ tournament, onBack, onUpdate, isPublicView = fa
                         </button>
                     ))}
                 </div>
-                <div className="tabs-right-actions">
-                    {activeTab !== 'info' && (
-                        <label className="detailed-score-toggle">
-                            <input
-                                type="checkbox"
-                                checked={showDetailedScore}
-                                onChange={(e) => setShowDetailedScore(e.target.checked)}
-                            />
-                            <span className="toggle-label">Ver puntuaciones completas</span>
-                        </label>
-                    )}
-                    {!isPublicView && tournament?.public_slug && (
-                        <a
-                            href={`/torneo/${tournament.public_slug}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="public-link-btn"
-                        >
-                            🔗 Ver Pública
-                        </a>
-                    )}
-                </div>
+                {activeTab !== 'info' && (
+                    <label className="detailed-score-toggle">
+                        <input
+                            type="checkbox"
+                            checked={showDetailedScore}
+                            onChange={(e) => setShowDetailedScore(e.target.checked)}
+                        />
+                        <span className="toggle-label">Sets</span>
+                    </label>
+                )}
+                {!isPublicView && tournament?.public_slug && (
+                    <a
+                        href={`/torneo/${tournament.public_slug}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="public-link-btn"
+                    >
+                        🔗 Pública
+                    </a>
+                )}
             </div>
 
             {renderTournamentContent()}
