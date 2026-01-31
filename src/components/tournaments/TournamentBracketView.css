@@ -260,7 +260,6 @@
 .info-top-row {
     display: flex;
     gap: 2rem;
-    margin-bottom: 2rem;
     align-items: stretch;
 }
 
@@ -425,6 +424,11 @@
     .info-grid {
         grid-template-columns: 1fr;
         gap: 1rem;
+    }
+
+    .info-main,
+    .info-sidebar {
+        gap: 1.25rem;
     }
 
     .info-top-row {
