@@ -368,24 +368,7 @@ const TournamentBracketView = ({ tournament, onBack, onUpdate, isPublicView = fa
         const p1Name = getPlayerName(match.player1);
         const p2Name = getPlayerName(match.player2);
 
-        let classifLabel = '';
-        if (bracket.name === 'Puestos 3-4' && match.position === 1) {
-            classifLabel = '3º-4º Puesto';
-        } else if (bracket.bracket_type === 'main' && match.round === 1 && match.position === 1) {
-            classifLabel = '1º-2º Puesto (Final)';
-        } else if (bracket.bracket_type !== 'main' && bracket.name !== 'Puestos 3-4' && match.round === 1) {
-            // Extract range numbers from bracket name, e.g., "Puestos 5-8" -> [5, 8]
-            // Usually the final of "5-8" decides 5th and 6th. "9-16" final decides 9th and 10th.
-            const rangeMatch = bracket.name.match(/(\d+)-(\d+)/);
-            if (rangeMatch) {
-                const start = parseInt(rangeMatch[1]);
-                // If the bracket is for positions X-Y, the winner is X, loser is X+1 (typically)
-                // e.g. 5-8 -> Final Winner is 5th, Loser is 6th.
-                classifLabel = `${start}º-${start + 1}º Puesto`;
-            } else {
-                classifLabel = `Ganador ${bracket.name}`;
-            }
-        }
+        // Classification labels removed for cleaner UI
 
         const renderScore = (playerNum) => {
             if (showDetailedScore) {
@@ -439,11 +422,7 @@ const TournamentBracketView = ({ tournament, onBack, onUpdate, isPublicView = fa
                     </div>
                 )}
 
-                {classifLabel && (
-                    <div className="classification-label">
-                        {classifLabel}
-                    </div>
-                )}
+
             </div>
         );
     };
@@ -834,14 +813,6 @@ const TournamentBracketView = ({ tournament, onBack, onUpdate, isPublicView = fa
                     </span>
                 </div>
                 <div className="header-actions">
-                    <label className="detailed-score-toggle">
-                        <input
-                            type="checkbox"
-                            checked={showDetailedScore}
-                            onChange={(e) => setShowDetailedScore(e.target.checked)}
-                        />
-                        <span className="toggle-label">Ver puntuación detallada</span>
-                    </label>
                     {!isPublicView && tournament?.public_slug && (
                         <a
                             href={`/torneo/${tournament.public_slug}`}
@@ -852,9 +823,6 @@ const TournamentBracketView = ({ tournament, onBack, onUpdate, isPublicView = fa
                             🔗 Ver Pública
                         </a>
                     )}
-                    <span className={`status-badge ${tournament.status}`}>
-                        {tournament.status === 'in_progress' ? '🔴 EN VIVO' : getStatusLabel(tournament.status).toUpperCase()}
-                    </span>
                 </div>
             </div>
 
@@ -877,6 +845,16 @@ const TournamentBracketView = ({ tournament, onBack, onUpdate, isPublicView = fa
                         </button>
                     ))}
                 </div>
+                {activeTab !== 'info' && (
+                    <label className="detailed-score-toggle">
+                        <input
+                            type="checkbox"
+                            checked={showDetailedScore}
+                            onChange={(e) => setShowDetailedScore(e.target.checked)}
+                        />
+                        <span className="toggle-label">Ver sets detallados</span>
+                    </label>
+                )}
             </div>
 
             {renderTournamentContent()}

@@ -214,6 +214,79 @@
     font-weight: 600;
 }
 
+/* Seed Button */
+.seed-btn {
+    padding: 0.25rem 0.5rem;
+    background: var(--bg-hover);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 32px;
+    text-align: center;
+}
+
+.seed-btn:hover {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+    background: rgba(var(--accent-rgb), 0.1);
+}
+
+.seed-btn.has-seed {
+    background: rgba(var(--accent-rgb), 0.15);
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+    font-weight: 600;
+}
+
+/* Seed Modal */
+.seed-modal .seed-input-group {
+    margin-bottom: 1.5rem;
+}
+
+.seed-modal .seed-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--bg-primary);
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: center;
+    margin-bottom: 0.5rem;
+    transition: border-color 0.3s ease;
+}
+
+.seed-modal .seed-input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+.seed-modal .seed-input::placeholder {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--text-secondary);
+}
+
+.seed-modal .seed-hint {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.confirm-modal-actions .btn-primary {
+    background: var(--accent-color);
+    color: white;
+}
+
+.confirm-modal-actions .btn-primary:hover {
+    opacity: 0.9;
+}
+
 .player-item .remove-btn {
     opacity: 0;
     padding: 0.25rem 0.5rem;

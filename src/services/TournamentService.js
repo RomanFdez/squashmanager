@@ -773,9 +773,125 @@ const generateMonradDraw = async (categoryId, registrations) => {
 
     // Calculate bracket size (next power of 2)
     const bracketSize = Math.pow(2, Math.ceil(Math.log2(numPlayers)));
+    const numMatchesFirstRound = bracketSize / 2;
 
-    // Shuffle players
-    const shuffledPlayers = [...registrations].sort(() => Math.random() - 0.5);
+    // ============================================================
+    // SEEDING LOGIC
+    // ============================================================
+    // Standard seeding positions for elimination brackets
+    // The pattern ensures top seeds meet as late as possible
+    // 
+    // For a 16-player bracket (8 first-round matches):
+    // Position 1: Seed 1    Position 8: Seed 2
+    // Position 4: Seed 3    Position 5: Seed 4
+    // Position 2: Seed 5    Position 7: Seed 6
+    // Position 3: Seed 7    Position 6: Seed 8
+    // ============================================================
+
+    /**
+     * Calculate the correct bracket position for a seed number
+     * This uses the standard tournament seeding algorithm
+     */
+    const getSeedPosition = (seed, totalPositions) => {
+        if (seed === 1) return 1;
+        if (seed === 2) return totalPositions;
+
+        // For seeds 3+, we use the standard bracket seeding formula
+        // Each power of 2 creates a new "tier" of seeds
+        const tierSize = Math.pow(2, Math.floor(Math.log2(seed)));
+        const tierStart = tierSize + 1;
+        const positionInTier = seed - tierSize;
+
+        // Get the opponent position for this tier
+        // Tier 2 (seeds 3-4): play against seeds 1-2 in semis
+        // Tier 3 (seeds 5-8): play against seeds 1-4 in quarters
+        // etc.
+        const segmentSize = totalPositions / tierSize;
+
+        // Calculate base positions for this tier
+        const basePositions = [];
+        for (let i = 1; i <= tierSize; i++) {
+            // Each seed in this tier gets placed to face a specific higher seed
+            const opponentSeed = tierSize + 1 - i;
+            const opponentPos = getSeedPosition(opponentSeed, totalPositions);
+
+            // Place this seed in the opposite half of where opponent is
+            if (opponentPos <= totalPositions / 2) {
+                basePositions.push(opponentPos + segmentSize - 1);
+            } else {
+                basePositions.push(opponentPos - segmentSize + 1);
+            }
+        }
+
+        // Sort positions for consistent assignment
+        basePositions.sort((a, b) => a - b);
+        return basePositions[positionInTier - 1];
+    };
+
+    // Simpler, proven seeding position mapping
+    const getStandardSeedPositions = (numPositions) => {
+        // This generates the standard seeding chart
+        // For 8 positions: [1, 8, 4, 5, 2, 7, 3, 6]
+        // For 16 positions: [1,16,8,9,4,13,5,12,2,15,7,10,3,14,6,11]
+
+        const positions = [1];
+
+        for (let round = 1; round <= Math.log2(numPositions); round++) {
+            const sum = Math.pow(2, round) + 1;
+            const tempPositions = [];
+
+            for (let i = 0; i < positions.length; i++) {
+                tempPositions.push(positions[i]);
+                tempPositions.push(sum - positions[i]);
+            }
+
+            positions.length = 0;
+            positions.push(...tempPositions);
+
+            if (positions.length >= numPositions) break;
+        }
+
+        return positions.slice(0, numPositions);
+    };
+
+    // Get standard seeding positions for our bracket size
+    const seedPositionOrder = getStandardSeedPositions(numMatchesFirstRound);
+
+    // Separate seeded and unseeded players
+    const seededPlayers = registrations
+        .filter(r => r.seed && r.seed > 0)
+        .sort((a, b) => a.seed - b.seed);
+
+    const unseededPlayers = registrations
+        .filter(r => !r.seed || r.seed <= 0)
+        .sort(() => Math.random() - 0.5); // Shuffle unseeded players
+
+    // Create position assignments
+    // Each position in the first round will have a player or be part of a match
+    const playerPositions = new Array(numMatchesFirstRound * 2).fill(null);
+
+    // Place seeded players in their designated positions
+    // Position index is 0-based, but match positions are 1-based
+    for (let i = 0; i < seededPlayers.length && i < seedPositionOrder.length; i++) {
+        const matchPosition = seedPositionOrder[i]; // 1-based match position
+        const playerIndex = (matchPosition - 1) * 2; // 0-based, player goes to p1 slot of match
+        playerPositions[playerIndex] = seededPlayers[i];
+    }
+
+    // Fill remaining positions with unseeded players
+    let unseededIdx = 0;
+    for (let i = 0; i < playerPositions.length && unseededIdx < unseededPlayers.length; i++) {
+        if (playerPositions[i] === null) {
+            playerPositions[unseededIdx % 2 === 0 ? i : playerPositions.length - 1 - i] = unseededPlayers[unseededIdx++];
+        }
+    }
+
+    // Re-fill any remaining nulls
+    for (let i = 0; i < playerPositions.length && unseededIdx < unseededPlayers.length; i++) {
+        if (playerPositions[i] === null) {
+            playerPositions[i] = unseededPlayers[unseededIdx++];
+        }
+    }
 
     const brackets = [];
     const allMatches = [];
@@ -845,24 +961,40 @@ const generateMonradDraw = async (categoryId, registrations) => {
         if (range) bracketMap[`${range.range_start} - ${range.range_end}`] = b.id;
     });
 
-    // 1. Prepare first round matches for Main Bracket to handle BYEs correctly
-    const numMatchesFirstRound = bracketSize / 2;
-    const numFullMatches = numPlayers - numMatchesFirstRound;
-    const mainFirstRoundAssignments = [];
-    let currentPlayerIdx = 0;
+    // ============================================================
+    // FIRST ROUND MATCH ASSIGNMENTS WITH SEEDING AND BYEs
+    // ============================================================
+    // BYEs are given to top seeds when there aren't enough players
+    // Number of BYEs = bracketSize - numPlayers
+    const numByes = bracketSize - numPlayers;
 
-    for (let p = 1; p <= numMatchesFirstRound; p++) {
-        const assignment = { p1: null, p2: null, status: 'pending', winner: null };
-        if (currentPlayerIdx < numPlayers) {
-            assignment.p1 = shuffledPlayers[currentPlayerIdx++];
-            if (p <= numFullMatches && currentPlayerIdx < numPlayers) {
-                assignment.p2 = shuffledPlayers[currentPlayerIdx++];
-            } else {
-                // BYE
-                assignment.status = 'completed';
-                assignment.winner = assignment.p1.id;
-            }
+    // Create first round match assignments
+    // Matches with BYEs should have the seeded player advance automatically
+    const mainFirstRoundAssignments = [];
+
+    for (let matchPos = 1; matchPos <= numMatchesFirstRound; matchPos++) {
+        const p1Idx = (matchPos - 1) * 2;
+        const p2Idx = p1Idx + 1;
+
+        const p1 = playerPositions[p1Idx];
+        const p2 = playerPositions[p2Idx];
+
+        const assignment = {
+            p1: p1,
+            p2: p2,
+            status: 'pending',
+            winner: null
+        };
+
+        // Handle BYE: if one player is null, the other wins automatically
+        if (p1 && !p2) {
+            assignment.status = 'completed';
+            assignment.winner = p1.id;
+        } else if (p2 && !p1) {
+            assignment.status = 'completed';
+            assignment.winner = p2.id;
         }
+
         mainFirstRoundAssignments.push(assignment);
     }
 

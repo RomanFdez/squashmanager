@@ -16,6 +16,8 @@ const StepPlayers = ({ tournamentData, updateData, tournamentId }) => {
     });
     const [searchTerm, setSearchTerm] = useState('');
     const [confirmModal, setConfirmModal] = useState({ show: false, registration: null });
+    const [seedModal, setSeedModal] = useState({ show: false, registration: null });
+    const [seedValue, setSeedValue] = useState('');
 
     // Derive selectedCategory from tournamentData to always get fresh data
     const selectedCategory = tournamentData.categories.find(c => c.id === selectedCategoryId) || null;
@@ -157,6 +159,65 @@ const StepPlayers = ({ tournamentData, updateData, tournamentId }) => {
         return 'external';
     };
 
+    const handleOpenSeedModal = (registration) => {
+        setSeedModal({ show: true, registration });
+        setSeedValue(registration.seed || '');
+    };
+
+    const handleSetSeed = async () => {
+        const registration = seedModal.registration;
+        if (!registration) return;
+
+        const seed = seedValue === '' ? null : parseInt(seedValue);
+
+        // Validate seed number
+        if (seed !== null && (isNaN(seed) || seed < 1 || seed > 32)) {
+            alert('El seed debe ser un número entre 1 y 32');
+            return;
+        }
+
+        // Check if seed is already used by another player
+        if (seed !== null) {
+            const existingSeed = registrations.find(
+                r => r.id !== registration.id && r.seed === seed
+            );
+            if (existingSeed) {
+                alert(`El seed #${seed} ya está asignado a ${getPlayerName(existingSeed)}`);
+                return;
+            }
+        }
+
+        try {
+            await TournamentService.updateRegistration(registration.id, { seed });
+            await loadCategoryRegistrations(selectedCategoryId);
+            setSeedModal({ show: false, registration: null });
+            setSeedValue('');
+        } catch (error) {
+            console.error('Error updating seed:', error);
+            alert('Error al actualizar el seed: ' + (error.message || 'Error desconocido'));
+        }
+    };
+
+    const handleClearSeed = async () => {
+        const registration = seedModal.registration;
+        if (!registration) return;
+
+        try {
+            await TournamentService.updateRegistration(registration.id, { seed: null });
+            await loadCategoryRegistrations(selectedCategoryId);
+            setSeedModal({ show: false, registration: null });
+            setSeedValue('');
+        } catch (error) {
+            console.error('Error clearing seed:', error);
+            alert('Error al eliminar el seed');
+        }
+    };
+
+    const handleCloseSeedModal = () => {
+        setSeedModal({ show: false, registration: null });
+        setSeedValue('');
+    };
+
     const getCategoryTypeIcon = (type) => {
         const icons = { masculina: '♂️', femenina: '♀️', mixta: '⚥' };
         return icons[type] || '🎾';
@@ -229,7 +290,13 @@ const StepPlayers = ({ tournamentData, updateData, tournamentId }) => {
                                                         {getPlayerType(reg) === 'member' ? 'Socio' : 'Externo'}
                                                     </span>
                                                 </div>
-                                                {reg.seed && <span className="player-seed">#{reg.seed}</span>}
+                                                <button
+                                                    className={`seed-btn ${reg.seed ? 'has-seed' : ''}`}
+                                                    onClick={() => handleOpenSeedModal(reg)}
+                                                    title={reg.seed ? `Seed #${reg.seed}` : 'Asignar seed'}
+                                                >
+                                                    {reg.seed ? `#${reg.seed}` : '🌱'}
+                                                </button>
                                                 <button
                                                     className="remove-btn"
                                                     onClick={() => handleRemoveClick(reg)}
@@ -387,6 +454,44 @@ const StepPlayers = ({ tournamentData, updateData, tournamentId }) => {
                             </button>
                             <button className="btn btn-danger" onClick={handleConfirmRemove}>
                                 Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Seed Modal */}
+            {seedModal.show && (
+                <div className="confirm-modal-overlay" onClick={handleCloseSeedModal}>
+                    <div className="confirm-modal seed-modal" onClick={(e) => e.stopPropagation()}>
+                        <div className="confirm-modal-icon">🌱</div>
+                        <h4>Asignar Seed</h4>
+                        <p>
+                            Asigna un número de seed para <strong>{seedModal.registration ? getPlayerName(seedModal.registration) : ''}</strong>
+                        </p>
+                        <div className="seed-input-group">
+                            <input
+                                type="number"
+                                min="1"
+                                max="32"
+                                value={seedValue}
+                                onChange={(e) => setSeedValue(e.target.value)}
+                                placeholder="Ej: 1, 2, 3..."
+                                className="seed-input"
+                            />
+                            <span className="seed-hint">Los cabezas de serie (1-4) se colocan automáticamente en el cuadro</span>
+                        </div>
+                        <div className="confirm-modal-actions">
+                            <button className="btn btn-secondary" onClick={handleCloseSeedModal}>
+                                Cancelar
+                            </button>
+                            {seedModal.registration?.seed && (
+                                <button className="btn btn-danger" onClick={handleClearSeed}>
+                                    Quitar Seed
+                                </button>
+                            )}
+                            <button className="btn btn-primary" onClick={handleSetSeed}>
+                                Guardar
                             </button>
                         </div>
                     </div>
