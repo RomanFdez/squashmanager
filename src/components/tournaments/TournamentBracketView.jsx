@@ -834,26 +834,28 @@ const TournamentBracketView = ({ tournament, onBack, onUpdate, isPublicView = fa
                         </button>
                     ))}
                 </div>
-                {activeTab !== 'info' && (
-                    <label className="detailed-score-toggle">
-                        <input
-                            type="checkbox"
-                            checked={showDetailedScore}
-                            onChange={(e) => setShowDetailedScore(e.target.checked)}
-                        />
-                        <span className="toggle-label">Sets</span>
-                    </label>
-                )}
-                {!isPublicView && tournament?.public_slug && (
-                    <a
-                        href={`/torneo/${tournament.public_slug}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="public-link-btn"
-                    >
-                        🔗 Pública
-                    </a>
-                )}
+                <div className="tabs-right-actions">
+                    {activeTab !== 'info' && (
+                        <label className="detailed-score-toggle">
+                            <input
+                                type="checkbox"
+                                checked={showDetailedScore}
+                                onChange={(e) => setShowDetailedScore(e.target.checked)}
+                            />
+                            <span className="toggle-label">Sets</span>
+                        </label>
+                    )}
+                    {!isPublicView && tournament?.public_slug && (
+                        <a
+                            href={`/torneo/${tournament.public_slug}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="public-link-btn"
+                        >
+                            🔗 Pública
+                        </a>
+                    )}
+                </div>
             </div>
 
             {renderTournamentContent()}
