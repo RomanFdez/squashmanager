@@ -25,21 +25,14 @@
     margin: 0 auto;
 }
 
-.public-page-header .header-logo {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    text-decoration: none;
-    color: var(--text-color);
+.public-page-header .header-tournament-name {
+    font-size: 0.9rem;
     font-weight: 600;
-}
-
-.public-page-header .logo-icon {
-    font-size: 1.2rem;
-}
-
-.public-page-header .logo-text {
-    font-size: 0.85rem;
+    color: var(--text-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 70%;
 }
 
 .public-page-header .header-login-btn {

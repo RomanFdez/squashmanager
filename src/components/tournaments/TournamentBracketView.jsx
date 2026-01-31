@@ -852,7 +852,7 @@ const TournamentBracketView = ({ tournament, onBack, onUpdate, isPublicView = fa
                             checked={showDetailedScore}
                             onChange={(e) => setShowDetailedScore(e.target.checked)}
                         />
-                        <span className="toggle-label">Ver sets detallados</span>
+                        <span className="toggle-label">Ver puntuaciones completas</span>
                     </label>
                 )}
             </div>

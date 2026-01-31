@@ -104,12 +104,12 @@
     gap: 0.4rem;
     white-space: nowrap;
     font-size: 0.75rem;
-    color: var(--text-color-light);
+    color: #333;
     cursor: pointer;
     padding: 0.3rem 0.6rem;
-    background: var(--card-bg);
+    background: #f5f5f5;
     border-radius: 6px;
-    border: 1px solid var(--border-color);
+    border: 1px solid #ddd;
 }
 
 .detailed-score-toggle input {
@@ -120,6 +120,7 @@
 
 .detailed-score-toggle .toggle-label {
     font-size: 0.7rem;
+    color: #333;
 }
 
 .category-tabs {
@@ -744,12 +745,17 @@
 
     .bracket-round {
         min-width: 100px;
-        gap: 0.75rem;
+        max-width: 110px;
+        gap: 0.5rem;
     }
 
-    .round-title {
-        font-size: 0.65rem;
-        padding: 0.2rem 0.4rem;
+    .round-header {
+        font-size: 0.6rem;
+        padding: 0.15rem 0.3rem;
+        margin-bottom: 0.25rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .match-card {

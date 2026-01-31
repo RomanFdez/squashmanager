@@ -56,10 +56,7 @@ const TournamentPublic = () => {
         <div className="tournament-public-page">
             <header className="public-page-header">
                 <div className="header-content">
-                    <Link to="/" className="header-logo">
-                        <span className="logo-icon">🏸</span>
-                        <span className="logo-text">CDS Ciudad Murcia</span>
-                    </Link>
+                    <span className="header-tournament-name">🏆 {tournament?.name || 'Torneo'}</span>
                     <Link to="/login" className="header-login-btn">
                         🔐 Iniciar Sesión
                     </Link>
