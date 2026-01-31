@@ -134,21 +134,21 @@
     font-size: 0.75rem;
     cursor: pointer;
     padding: 0.35rem 0.6rem;
-    background: white;
+    background: rgba(255, 255, 255, 0.2);
     border-radius: 6px;
-    border: none;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
 }
 
 .detailed-score-toggle input {
     width: 14px;
     height: 14px;
-    accent-color: var(--primary-color);
+    accent-color: white;
 }
 
 .detailed-score-toggle .toggle-label {
     font-size: 0.7rem;
-    color: #333;
+    color: white;
     font-weight: 500;
 }
 

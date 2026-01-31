@@ -774,79 +774,48 @@ const generateMonradDraw = async (categoryId, registrations) => {
     // Calculate bracket size (next power of 2)
     const bracketSize = Math.pow(2, Math.ceil(Math.log2(numPlayers)));
     const numMatchesFirstRound = bracketSize / 2;
+    const numByes = bracketSize - numPlayers;
+
+    console.log(`Generating bracket: ${numPlayers} players, bracket size ${bracketSize}, ${numMatchesFirstRound} first-round matches, ${numByes} BYEs`);
 
     // ============================================================
-    // SEEDING LOGIC
+    // STANDARD TOURNAMENT SEEDING POSITIONS
     // ============================================================
-    // Standard seeding positions for elimination brackets
-    // The pattern ensures top seeds meet as late as possible
-    // 
-    // For a 16-player bracket (8 first-round matches):
-    // Position 1: Seed 1    Position 8: Seed 2
-    // Position 4: Seed 3    Position 5: Seed 4
-    // Position 2: Seed 5    Position 7: Seed 6
-    // Position 3: Seed 7    Position 6: Seed 8
+    // This is the standard seeding used in tennis, squash, etc.
+    // Example for 8 matches (16-player bracket):
+    //   Match 1: Seed 1 vs unseeded  →  Seed 1 at top
+    //   Match 8: Seed 2 vs unseeded  →  Seed 2 at bottom (meet #1 in final)
+    //   Match 4: Seed 3 vs unseeded  →  In opposite half from #1 (meet in semis)
+    //   Match 5: Seed 4 vs unseeded  →  In opposite half from #2 (meet in semis)
+    //   And so on for seeds 5-8...
     // ============================================================
 
     /**
-     * Calculate the correct bracket position for a seed number
-     * This uses the standard tournament seeding algorithm
+     * Generate standard seeding match positions
+     * Returns array where index = seed rank (0-based), value = match number (1-based)
+     * For 8 positions: [1, 8, 4, 5, 2, 7, 3, 6]
+     *   - Seed 1 → Match 1
+     *   - Seed 2 → Match 8
+     *   - Seed 3 → Match 4
+     *   - Seed 4 → Match 5
+     *   - etc.
      */
-    const getSeedPosition = (seed, totalPositions) => {
-        if (seed === 1) return 1;
-        if (seed === 2) return totalPositions;
-
-        // For seeds 3+, we use the standard bracket seeding formula
-        // Each power of 2 creates a new "tier" of seeds
-        const tierSize = Math.pow(2, Math.floor(Math.log2(seed)));
-        const tierStart = tierSize + 1;
-        const positionInTier = seed - tierSize;
-
-        // Get the opponent position for this tier
-        // Tier 2 (seeds 3-4): play against seeds 1-2 in semis
-        // Tier 3 (seeds 5-8): play against seeds 1-4 in quarters
-        // etc.
-        const segmentSize = totalPositions / tierSize;
-
-        // Calculate base positions for this tier
-        const basePositions = [];
-        for (let i = 1; i <= tierSize; i++) {
-            // Each seed in this tier gets placed to face a specific higher seed
-            const opponentSeed = tierSize + 1 - i;
-            const opponentPos = getSeedPosition(opponentSeed, totalPositions);
-
-            // Place this seed in the opposite half of where opponent is
-            if (opponentPos <= totalPositions / 2) {
-                basePositions.push(opponentPos + segmentSize - 1);
-            } else {
-                basePositions.push(opponentPos - segmentSize + 1);
-            }
-        }
-
-        // Sort positions for consistent assignment
-        basePositions.sort((a, b) => a - b);
-        return basePositions[positionInTier - 1];
-    };
-
-    // Simpler, proven seeding position mapping
     const getStandardSeedPositions = (numPositions) => {
-        // This generates the standard seeding chart
-        // For 8 positions: [1, 8, 4, 5, 2, 7, 3, 6]
-        // For 16 positions: [1,16,8,9,4,13,5,12,2,15,7,10,3,14,6,11]
+        if (numPositions === 1) return [1];
 
         const positions = [1];
 
         for (let round = 1; round <= Math.log2(numPositions); round++) {
             const sum = Math.pow(2, round) + 1;
-            const tempPositions = [];
+            const newPositions = [];
 
             for (let i = 0; i < positions.length; i++) {
-                tempPositions.push(positions[i]);
-                tempPositions.push(sum - positions[i]);
+                newPositions.push(positions[i]);
+                newPositions.push(sum - positions[i]);
             }
 
             positions.length = 0;
-            positions.push(...tempPositions);
+            positions.push(...newPositions);
 
             if (positions.length >= numPositions) break;
         }
@@ -854,8 +823,9 @@ const generateMonradDraw = async (categoryId, registrations) => {
         return positions.slice(0, numPositions);
     };
 
-    // Get standard seeding positions for our bracket size
-    const seedPositionOrder = getStandardSeedPositions(numMatchesFirstRound);
+    // Get seeding positions - this tells us which match each seed goes to
+    const seedMatchPositions = getStandardSeedPositions(numMatchesFirstRound);
+    console.log('Seed positions:', seedMatchPositions);
 
     // Separate seeded and unseeded players
     const seededPlayers = registrations
@@ -866,32 +836,80 @@ const generateMonradDraw = async (categoryId, registrations) => {
         .filter(r => !r.seed || r.seed <= 0)
         .sort(() => Math.random() - 0.5); // Shuffle unseeded players
 
-    // Create position assignments
-    // Each position in the first round will have a player or be part of a match
-    const playerPositions = new Array(numMatchesFirstRound * 2).fill(null);
+    console.log(`Seeded players: ${seededPlayers.length}, Unseeded players: ${unseededPlayers.length}`);
 
-    // Place seeded players in their designated positions
-    // Position index is 0-based, but match positions are 1-based
-    for (let i = 0; i < seededPlayers.length && i < seedPositionOrder.length; i++) {
-        const matchPosition = seedPositionOrder[i]; // 1-based match position
-        const playerIndex = (matchPosition - 1) * 2; // 0-based, player goes to p1 slot of match
-        playerPositions[playerIndex] = seededPlayers[i];
+    // ============================================================
+    // PLAYER ASSIGNMENT ALGORITHM
+    // ============================================================
+    // Each match needs player1 (top position) and player2 (bottom position)
+    // - Seeded players go to player1 position in their designated match
+    // - BYEs go to player2 position of top seed matches (so seeds get BYEs)
+    // - Remaining unseeded players fill remaining spots
+    // ============================================================
+
+    // Initialize matches array: [{ p1: null, p2: null }, ...]
+    const matchAssignments = [];
+    for (let i = 0; i < numMatchesFirstRound; i++) {
+        matchAssignments.push({ p1: null, p2: null });
     }
 
-    // Fill remaining positions with unseeded players
-    let unseededIdx = 0;
-    for (let i = 0; i < playerPositions.length && unseededIdx < unseededPlayers.length; i++) {
-        if (playerPositions[i] === null) {
-            playerPositions[unseededIdx % 2 === 0 ? i : playerPositions.length - 1 - i] = unseededPlayers[unseededIdx++];
+    // Step 1: Place seeded players in their designated matches (p1 position)
+    for (let seedRank = 0; seedRank < seededPlayers.length && seedRank < seedMatchPositions.length; seedRank++) {
+        const matchNumber = seedMatchPositions[seedRank]; // 1-based
+        const matchIndex = matchNumber - 1; // 0-based
+        matchAssignments[matchIndex].p1 = seededPlayers[seedRank];
+        console.log(`Seed ${seedRank + 1} (${seededPlayers[seedRank].registration_name || 'Unknown'}) → Match ${matchNumber}`);
+    }
+
+    // Step 2: Assign BYEs to matches with top seeds
+    // BYEs go to the p2 position of matches with seeds (prioritizing top seeds)
+    let byesAssigned = 0;
+    for (let seedRank = 0; seedRank < seedMatchPositions.length && byesAssigned < numByes; seedRank++) {
+        const matchNumber = seedMatchPositions[seedRank];
+        const matchIndex = matchNumber - 1;
+
+        // Only assign BYE if this match has a seeded player
+        if (matchAssignments[matchIndex].p1 !== null && matchAssignments[matchIndex].p2 === null) {
+            // p2 stays null = BYE (seeded player auto-advances)
+            byesAssigned++;
+            console.log(`BYE assigned to Match ${matchNumber} (Seed ${seedRank + 1} advances)`);
         }
     }
 
-    // Re-fill any remaining nulls
-    for (let i = 0; i < playerPositions.length && unseededIdx < unseededPlayers.length; i++) {
-        if (playerPositions[i] === null) {
-            playerPositions[i] = unseededPlayers[unseededIdx++];
+    // If we still have BYEs to assign, assign to remaining matches with seeded players
+    if (byesAssigned < numByes) {
+        for (let i = 0; i < numMatchesFirstRound && byesAssigned < numByes; i++) {
+            if (matchAssignments[i].p1 !== null && matchAssignments[i].p2 === null) {
+                byesAssigned++;
+                console.log(`Extra BYE assigned to Match ${i + 1}`);
+            }
         }
     }
+
+    // Step 3: Fill remaining spots with unseeded players
+    let unseededIndex = 0;
+
+    // First pass: fill p1 positions that are empty (matches without seeds)
+    for (let i = 0; i < numMatchesFirstRound && unseededIndex < unseededPlayers.length; i++) {
+        if (matchAssignments[i].p1 === null) {
+            matchAssignments[i].p1 = unseededPlayers[unseededIndex++];
+        }
+    }
+
+    // Second pass: fill p2 positions that are empty (opponents for seeds and unseeded)
+    for (let i = 0; i < numMatchesFirstRound && unseededIndex < unseededPlayers.length; i++) {
+        if (matchAssignments[i].p2 === null) {
+            matchAssignments[i].p2 = unseededPlayers[unseededIndex++];
+        }
+    }
+
+    // Log final assignments
+    console.log('Final match assignments:');
+    matchAssignments.forEach((match, i) => {
+        const p1Name = match.p1?.registration_name || match.p1?.member?.name || 'NULL';
+        const p2Name = match.p2 ? (match.p2.registration_name || match.p2.member?.name || 'Opponent') : 'BYE';
+        console.log(`  Match ${i + 1}: ${p1Name} vs ${p2Name}`);
+    });
 
     const brackets = [];
     const allMatches = [];
@@ -964,20 +982,15 @@ const generateMonradDraw = async (categoryId, registrations) => {
     // ============================================================
     // FIRST ROUND MATCH ASSIGNMENTS WITH SEEDING AND BYEs
     // ============================================================
-    // BYEs are given to top seeds when there aren't enough players
-    // Number of BYEs = bracketSize - numPlayers
-    const numByes = bracketSize - numPlayers;
+    // matchAssignments already contains the correct player assignments
+    // Now we need to create the match records with BYE handling
 
-    // Create first round match assignments
-    // Matches with BYEs should have the seeded player advance automatically
     const mainFirstRoundAssignments = [];
 
-    for (let matchPos = 1; matchPos <= numMatchesFirstRound; matchPos++) {
-        const p1Idx = (matchPos - 1) * 2;
-        const p2Idx = p1Idx + 1;
-
-        const p1 = playerPositions[p1Idx];
-        const p2 = playerPositions[p2Idx];
+    for (let matchIdx = 0; matchIdx < numMatchesFirstRound; matchIdx++) {
+        const match = matchAssignments[matchIdx];
+        const p1 = match.p1;
+        const p2 = match.p2;
 
         const assignment = {
             p1: p1,
@@ -990,13 +1003,17 @@ const generateMonradDraw = async (categoryId, registrations) => {
         if (p1 && !p2) {
             assignment.status = 'completed';
             assignment.winner = p1.id;
+            console.log(`Match ${matchIdx + 1}: ${p1.registration_name || 'Player'} advances with BYE`);
         } else if (p2 && !p1) {
             assignment.status = 'completed';
             assignment.winner = p2.id;
+            console.log(`Match ${matchIdx + 1}: ${p2.registration_name || 'Player'} advances with BYE`);
         }
 
         mainFirstRoundAssignments.push(assignment);
     }
+
+    console.log(`Created ${mainFirstRoundAssignments.length} first round match assignments`);
 
     // Generate Matches for each bracket
     createdBrackets.forEach(b => {
