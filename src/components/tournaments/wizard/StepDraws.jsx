@@ -214,19 +214,31 @@ const StepDraws = ({ tournamentData, updateData, tournamentId }) => {
                                         type: 'group',
                                         groupId: group.id,
                                         playerId: p.registration_id,
-                                        name: getPlayerName(p.registration)
+                                        name: getPlayerName(p.registration),
+                                        seed: p.registration?.seed
                                     };
                                     const isSelected = isPlayerSelected(playerInfo);
 
                                     return (
                                         <tr
                                             key={p.id}
-                                            className={`${swapMode ? 'swappable' : ''} ${isSelected ? 'selected-player' : ''}`}
-                                            onClick={() => handlePlayerClick(playerInfo)}
-                                            style={{ cursor: swapMode ? 'pointer' : 'default' }}
+                                            className={`${swapMode ? 'swappable' : ''} ${isSelected ? 'selected-player' : ''} ${p.registration?.seed ? 'seed-player' : ''}`}
+                                            onClick={() => {
+                                                if (swapMode && p.registration?.seed) {
+                                                    alert('No se pueden intercambiar cabezas de serie');
+                                                    return;
+                                                }
+                                                handlePlayerClick(playerInfo);
+                                            }}
+                                            style={{ cursor: swapMode ? (p.registration?.seed ? 'not-allowed' : 'pointer') : 'default' }}
                                         >
                                             <td>{idx + 1}</td>
-                                            <td>{getPlayerName(p.registration)}</td>
+                                            <td>
+                                                {getPlayerName(p.registration)}
+                                                {p.registration?.seed && (
+                                                    <span className="seed-badge">#{p.registration.seed}</span>
+                                                )}
+                                            </td>
                                             <td className="center">{p.points}</td>
                                             <td className="center">{p.games_won + p.games_lost}</td>
                                         </tr>
@@ -264,7 +276,8 @@ const StepDraws = ({ tournamentData, updateData, tournamentId }) => {
             matchId: match.id,
             slot: 'player1',
             playerId: match.player1_id,
-            name: p1Name
+            name: p1Name,
+            seed: match.player1?.seed
         };
 
         const player2Info = {
@@ -272,7 +285,8 @@ const StepDraws = ({ tournamentData, updateData, tournamentId }) => {
             matchId: match.id,
             slot: 'player2',
             playerId: match.player2_id,
-            name: p2Name
+            name: p2Name,
+            seed: match.player2?.seed
         };
 
         const isP1Selected = isPlayerSelected(player1Info);
@@ -289,18 +303,38 @@ const StepDraws = ({ tournamentData, updateData, tournamentId }) => {
         return (
             <div className="match-card bracket-match">
                 <div
-                    className={`player-slot ${match.winner_id === match.player1_id ? 'winner' : ''} ${!match.player1_id ? 'bye' : ''} ${swapMode && match.player1_id ? 'swappable' : ''} ${isP1Selected ? 'selected-player' : ''}`}
-                    onClick={() => match.player1_id && handlePlayerClick(player1Info)}
-                    style={{ cursor: swapMode && match.player1_id ? 'pointer' : 'default' }}
+                    className={`player-slot ${match.winner_id === match.player1_id ? 'winner' : ''} ${!match.player1_id ? 'bye' : ''} ${swapMode && match.player1_id && !match.player1?.seed ? 'swappable' : ''} ${isP1Selected ? 'selected-player' : ''} ${match.player1?.seed ? 'seed-player' : ''}`}
+                    onClick={() => {
+                        if (!match.player1_id) return;
+                        if (swapMode && match.player1?.seed) {
+                            alert('No se pueden intercambiar cabezas de serie');
+                            return;
+                        }
+                        handlePlayerClick(player1Info);
+                    }}
+                    style={{ cursor: swapMode && match.player1_id ? (match.player1?.seed ? 'not-allowed' : 'pointer') : 'default' }}
                 >
-                    <span className="player-name">{p1Name}</span>
+                    <span className="player-name">
+                        {p1Name}
+                        {match.player1?.seed && <span className="seed-badge">#{match.player1.seed}</span>}
+                    </span>
                 </div>
                 <div
-                    className={`player-slot ${match.winner_id === match.player2_id ? 'winner' : ''} ${!match.player2_id ? 'bye' : ''} ${swapMode && match.player2_id ? 'swappable' : ''} ${isP2Selected ? 'selected-player' : ''}`}
-                    onClick={() => match.player2_id && handlePlayerClick(player2Info)}
-                    style={{ cursor: swapMode && match.player2_id ? 'pointer' : 'default' }}
+                    className={`player-slot ${match.winner_id === match.player2_id ? 'winner' : ''} ${!match.player2_id ? 'bye' : ''} ${swapMode && match.player2_id && !match.player2?.seed ? 'swappable' : ''} ${isP2Selected ? 'selected-player' : ''} ${match.player2?.seed ? 'seed-player' : ''}`}
+                    onClick={() => {
+                        if (!match.player2_id) return;
+                        if (swapMode && match.player2?.seed) {
+                            alert('No se pueden intercambiar cabezas de serie');
+                            return;
+                        }
+                        handlePlayerClick(player2Info);
+                    }}
+                    style={{ cursor: swapMode && match.player2_id ? (match.player2?.seed ? 'not-allowed' : 'pointer') : 'default' }}
                 >
-                    <span className="player-name">{p2Name}</span>
+                    <span className="player-name">
+                        {p2Name}
+                        {match.player2?.seed && <span className="seed-badge">#{match.player2.seed}</span>}
+                    </span>
                 </div>
                 {classifLabel && <div className="classification-label">{classifLabel}</div>}
             </div>

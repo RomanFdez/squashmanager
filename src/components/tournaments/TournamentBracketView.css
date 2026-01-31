@@ -1487,3 +1487,37 @@
 .sponsor-carousel-img {
     animation: fadeIn 0.5s ease-in-out;
 }
+
+/* Seed Badges */
+.seed-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent-color);
+    color: var(--primary-color);
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    line-height: 1;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.player-slot.seed-player {
+    position: relative;
+    border-left: 3px solid var(--accent-color) !important;
+    background: rgba(var(--accent-rgb), 0.03) !important;
+}
+
+.player-slot.seed-player .player-name {
+    color: var(--text-color);
+    font-weight: 600;
+}
+
+/* Standings table seed badge */
+.standings-table .seed-badge {
+    margin-left: 0.5rem;
+    font-size: 0.6rem;
+}

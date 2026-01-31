@@ -581,3 +581,40 @@
         width: 100%;
     }
 }
+
+/* Seed Badges */
+.seed-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent-color);
+    color: var(--primary-color);
+    font-size: 0.65rem;
+    font-weight: 800;
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+    line-height: 1;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.player-slot.seed-player,
+.standings-table tr.seed-player {
+    border-left: 3px solid var(--accent-color) !important;
+}
+
+.player-slot.seed-player {
+    background: rgba(var(--accent-rgb), 0.05) !important;
+}
+
+.player-slot.seed-player .player-name {
+    font-weight: 600;
+}
+
+/* Swappable state for seeds */
+.player-slot.seed-player.swappable,
+.player-slot.seed-player:hover {
+    cursor: not-allowed !important;
+    background: rgba(239, 68, 68, 0.05) !important;
+}

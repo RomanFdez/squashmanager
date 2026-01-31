@@ -225,6 +225,21 @@ const StepPlayers = ({ tournamentData, updateData, tournamentId }) => {
 
     const registrations = selectedCategory?.tournament_registrations || [];
 
+    // Sort registrations: seeds first (ascending), then by name
+    const sortedRegistrations = [...registrations].sort((a, b) => {
+        // Both have seeds
+        if (a.seed && b.seed) return a.seed - b.seed;
+        // Only a has seed
+        if (a.seed) return -1;
+        // Only b has seed
+        if (b.seed) return 1;
+
+        // Neither has seed, sort by name
+        const nameA = getPlayerName(a).toLowerCase();
+        const nameB = getPlayerName(b).toLowerCase();
+        return nameA.localeCompare(nameB);
+    });
+
     const filteredMembers = members.filter(m => {
         const matchesSearch = m.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             m.email?.toLowerCase().includes(searchTerm.toLowerCase());
@@ -281,7 +296,7 @@ const StepPlayers = ({ tournamentData, updateData, tournamentId }) => {
                                     </div>
                                 ) : (
                                     <div className="players-list">
-                                        {registrations.map((reg, index) => (
+                                        {sortedRegistrations.map((reg, index) => (
                                             <div key={reg.id} className="player-item">
                                                 <span className="player-number">{index + 1}</span>
                                                 <div className="player-info">

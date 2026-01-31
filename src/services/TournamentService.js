@@ -412,12 +412,12 @@ export const getBrackets = async (categoryId) => {
             tournament_matches(
         *,
                 player1: tournament_registrations!tournament_matches_player1_id_fkey(
-                    id, registration_name,
+                    id, registration_name, seed,
                     member: members(id, name),
                     external_player: external_players(id, name)
                 ),
                 player2: tournament_registrations!tournament_matches_player2_id_fkey(
-                    id, registration_name,
+                    id, registration_name, seed,
                     member: members(id, name),
                     external_player: external_players(id, name)
                 ),

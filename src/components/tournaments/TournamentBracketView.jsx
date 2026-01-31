@@ -406,13 +406,19 @@ const TournamentBracketView = ({ tournament, onBack, onUpdate, isPublicView = fa
                 className={`match-card bracket-match ${isClickable ? 'clickable' : ''} ${isCompleted ? 'completed' : ''} ${match.status === 'retired' ? 'retired' : ''} ${showDetailedScore ? 'detailed-mode' : ''}`}
                 onClick={() => isClickable && openScoreModal(match)}
             >
-                <div className={`player-slot ${match.winner_id === match.player1_id ? 'winner' : ''} ${!match.player1_id ? 'bye' : ''}`}>
-                    <span className="player-name">{p1Name}</span>
+                <div className={`player-slot ${match.winner_id === match.player1_id ? 'winner' : ''} ${!match.player1_id ? 'bye' : ''} ${match.player1?.seed ? 'seed-player' : ''}`}>
+                    <span className="player-name">
+                        {p1Name}
+                        {match.player1?.seed && <span className="seed-badge">#{match.player1.seed}</span>}
+                    </span>
                     {match.player1_id && renderScore(1)}
                 </div>
 
-                <div className={`player-slot ${match.winner_id === match.player2_id ? 'winner' : ''} ${!match.player2_id ? 'bye' : ''}`}>
-                    <span className="player-name">{p2Name}</span>
+                <div className={`player-slot ${match.winner_id === match.player2_id ? 'winner' : ''} ${!match.player2_id ? 'bye' : ''} ${match.player2?.seed ? 'seed-player' : ''}`}>
+                    <span className="player-name">
+                        {p2Name}
+                        {match.player2?.seed && <span className="seed-badge">#{match.player2.seed}</span>}
+                    </span>
                     {match.player2_id && renderScore(2)}
                 </div>
 
@@ -478,7 +484,12 @@ const TournamentBracketView = ({ tournament, onBack, onUpdate, isPublicView = fa
                                 .map((p, idx) => (
                                     <tr key={p.id}>
                                         <td>{idx + 1}</td>
-                                        <td>{getPlayerName(p.registration)}</td>
+                                        <td>
+                                            {getPlayerName(p.registration)}
+                                            {p.registration?.seed && (
+                                                <span className="seed-badge">#{p.registration.seed}</span>
+                                            )}
+                                        </td>
                                         <td className="center">{p.points}</td>
                                         <td className="center">{p.games_won + p.games_lost}</td>
                                     </tr>
@@ -592,7 +603,7 @@ const TournamentBracketView = ({ tournament, onBack, onUpdate, isPublicView = fa
                                     </div>
                                     {!user && (
                                         <div className="login-prompt" style={{ marginBottom: '1.5rem' }}>
-                                            <p>¿Tienes cuenta? <Link to="/login">Inicia sesión</Link> para inscribirte más rápido.</p>
+                                            <p>¿Tienes cuenta? <Link to={`/login?redirect=${encodeURIComponent(window.location.pathname)}`}>Inicia sesión</Link> para inscribirte más rápido.</p>
                                         </div>
                                     )}
                                     <form className="registration-form" onSubmit={handleExternalRegister}>

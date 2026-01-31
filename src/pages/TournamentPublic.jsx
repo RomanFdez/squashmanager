@@ -57,7 +57,7 @@ const TournamentPublic = () => {
             <header className="public-page-header">
                 <div className="header-content">
                     <span className="header-tournament-name">🏆 {tournament?.name || 'Torneo'}</span>
-                    <Link to="/login" className="header-login-btn">
+                    <Link to={`/login?redirect=/torneo/${slug}`} className="header-login-btn">
                         🔐 Iniciar Sesión
                     </Link>
                 </div>
