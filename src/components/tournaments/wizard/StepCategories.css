@@ -150,19 +150,66 @@
     background: rgba(var(--accent-rgb), 0.05);
 }
 
-/* Category Form */
+/* Category Form Modal */
+.category-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1510;
+    animation: fadeIn 0.2s ease;
+}
+
 .category-form {
-    background: var(--bg-secondary);
+    background: #1e1e2e;
     border-radius: 12px;
-    padding: 1rem;
-    border: 1px solid var(--accent-color);
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    max-width: 550px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
     animation: slideUp 0.3s ease;
 }
 
-.category-form h4 {
-    font-size: 1rem;
-    color: var(--text-primary);
-    margin-bottom: 1rem;
+.form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.form-header h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0;
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+    color: #ffffff;
+}
+
+.form-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
 }
 
 /* Type Selector */
@@ -172,14 +219,17 @@
 }
 
 .type-option {
+    flex: 1;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
-    padding: 0.75rem 1rem;
-    background: var(--bg-primary);
-    border: 2px solid var(--border-color);
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     cursor: pointer;
+    color: rgba(255, 255, 255, 0.7);
     transition: all 0.3s ease;
 }
 
@@ -189,7 +239,8 @@
 
 .type-option.selected {
     border-color: var(--accent-color);
-    background: rgba(var(--accent-rgb), 0.1);
+    background: rgba(var(--accent-rgb), 0.2);
+    color: #ffffff;
 }
 
 .type-option input {
@@ -268,14 +319,55 @@
     border-radius: 8px;
 }
 
-/* Form Actions */
-.form-actions {
-    display: flex;
-    justify-content: flex-end;
+/* Form Actions Footer */
+.form-actions-footer {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
     gap: 0.75rem;
     margin-top: 1.5rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border-color);
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.category-form label {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.9);
+    /* Much lighter white for better visibility */
+    margin-bottom: 0.4rem;
+    display: block;
+}
+
+.category-form input[type="text"],
+.category-form input[type="number"],
+.category-form select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #ffffff;
+    font-size: 0.9rem;
+}
+
+.category-form input:focus,
+.category-form select:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+.btn-cancel {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    padding: 0.75rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-cancel:hover {
+    background: rgba(255, 255, 255, 0.1);
 }
 
 /* Responsive */

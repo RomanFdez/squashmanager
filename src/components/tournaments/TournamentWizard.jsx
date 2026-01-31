@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import StepInfo from './wizard/StepInfo';
 import StepLogos from './wizard/StepLogos';
 import StepCategories from './wizard/StepCategories';
@@ -18,6 +18,7 @@ const STEPS = [
 const TournamentWizard = ({ tournament, onComplete, onCancel }) => {
     const [currentStep, setCurrentStep] = useState(1);
     const [saving, setSaving] = useState(false);
+    const contentRef = useRef(null);
     const [tournamentData, setTournamentData] = useState({
         id: null,
         name: '',
@@ -56,6 +57,17 @@ const TournamentWizard = ({ tournament, onComplete, onCancel }) => {
             });
         }
     }, [tournament]);
+
+    // Auto-scroll to top when step changes or on mount
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+        if (contentRef.current) {
+            contentRef.current.scrollTo(0, 0);
+        }
+    }, [currentStep]);
 
     const updateData = (field, value) => {
         setTournamentData(prev => ({
@@ -205,7 +217,7 @@ const TournamentWizard = ({ tournament, onComplete, onCancel }) => {
             </div>
 
             {/* Step Content */}
-            <div className="wizard-content">
+            <div className="wizard-content" ref={contentRef}>
                 {renderStepContent()}
             </div>
 

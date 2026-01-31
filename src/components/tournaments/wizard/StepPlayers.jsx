@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../../lib/supabaseClient';
 import * as TournamentService from '../../../services/TournamentService';
+import { User } from 'lucide-react';
 import './StepPlayers.css';
 
 const StepPlayers = ({ tournamentData, updateData, tournamentId }) => {
@@ -283,11 +284,23 @@ const StepPlayers = ({ tournamentData, updateData, tournamentId }) => {
                             <div className="players-list-section">
                                 <div className="section-header">
                                     <h4>Jugadores Inscritos ({registrations.length})</h4>
-                                    {selectedCategory.max_participants && (
-                                        <span className="capacity-badge">
-                                            {registrations.length} / {selectedCategory.max_participants}
-                                        </span>
-                                    )}
+                                    <div className="header-actions">
+                                        {!showAddForm && (
+                                            <button className="add-player-btn" onClick={() => setShowAddForm(true)}>
+                                                ➕ Añadir Jugador
+                                            </button>
+                                        )}
+                                        {selectedCategory.max_participants && (
+                                            <div className="capacity-wrapper">
+                                                {registrations.length > selectedCategory.max_participants && (
+                                                    <span className="over-capacity-text">⚠️ Máximo de jugadores excedido</span>
+                                                )}
+                                                <span className={`capacity-badge ${registrations.length > selectedCategory.max_participants ? 'over-capacity' : ''}`}>
+                                                    {registrations.length} / {selectedCategory.max_participants}
+                                                </span>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
 
                                 {registrations.length === 0 ? (
@@ -310,7 +323,7 @@ const StepPlayers = ({ tournamentData, updateData, tournamentId }) => {
                                                     onClick={() => handleOpenSeedModal(reg)}
                                                     title={reg.seed ? `Seed #${reg.seed}` : 'Asignar seed'}
                                                 >
-                                                    {reg.seed ? `#${reg.seed}` : '🌱'}
+                                                    {reg.seed ? `#${reg.seed}` : <User size={14} />}
                                                 </button>
                                                 <button
                                                     className="remove-btn"
@@ -323,12 +336,7 @@ const StepPlayers = ({ tournamentData, updateData, tournamentId }) => {
                                     </div>
                                 )}
 
-                                {/* Regular Add Button - visible on desktop */}
-                                {!showAddForm && (
-                                    <button className="add-player-btn" onClick={() => setShowAddForm(true)}>
-                                        ➕ Añadir Jugador
-                                    </button>
-                                )}
+
                             </div>
 
                             {/* Floating Add Button - visible on mobile */}
@@ -338,119 +346,132 @@ const StepPlayers = ({ tournamentData, updateData, tournamentId }) => {
                                 </button>
                             )}
 
-                            {/* Add Player Form */}
-                            {showAddForm && (
-                                <div className="add-player-panel">
-                                    <div className="panel-header">
-                                        <h4>Añadir Jugador</h4>
-                                        <button className="close-btn" onClick={() => {
-                                            setShowAddForm(false);
-                                            setIsExternalPlayer(false);
-                                        }}>✕</button>
-                                    </div>
-
-                                    {/* Toggle Member/External */}
-                                    <div className="player-type-toggle">
-                                        <button
-                                            className={`toggle-btn ${!isExternalPlayer ? 'active' : ''}`}
-                                            onClick={() => setIsExternalPlayer(false)}
-                                        >
-                                            👤 Socio del Club
-                                        </button>
-                                        <button
-                                            className={`toggle-btn ${isExternalPlayer ? 'active' : ''}`}
-                                            onClick={() => setIsExternalPlayer(true)}
-                                        >
-                                            🆕 Jugador Externo
-                                        </button>
-                                    </div>
-
-                                    {!isExternalPlayer ? (
-                                        /* Member Search */
-                                        <div className="member-search">
-                                            <input
-                                                type="text"
-                                                placeholder="🔍 Buscar socio por nombre o email..."
-                                                value={searchTerm}
-                                                onChange={(e) => setSearchTerm(e.target.value)}
-                                            />
-
-                                            {loadingMembers ? (
-                                                <div className="loading-state">
-                                                    <div className="spinner"></div>
-                                                </div>
-                                            ) : (
-                                                <div className="members-list">
-                                                    {filteredMembers.length === 0 ? (
-                                                        <p className="no-results">No se encontraron resultados</p>
-                                                    ) : (
-                                                        filteredMembers.slice(0, 10).map(member => {
-                                                            const isRegistered = registrations.some(r => r.member_id === member.id);
-                                                            return (
-                                                                <div
-                                                                    key={member.id}
-                                                                    className={`member-item ${isRegistered ? 'registered' : ''}`}
-                                                                    onClick={() => !isRegistered && handleAddMember(member)}
-                                                                >
-                                                                    <div className="member-info">
-                                                                        <span className="member-name">{member.name}</span>
-                                                                        {member.email && (
-                                                                            <span className="member-email">{member.email}</span>
-                                                                        )}
-                                                                    </div>
-                                                                    {isRegistered ? (
-                                                                        <span className="registered-badge">✓ Inscrito</span>
-                                                                    ) : (
-                                                                        <span className="add-badge">+ Añadir</span>
-                                                                    )}
-                                                                </div>
-                                                            );
-                                                        })
-                                                    )}
-                                                </div>
-                                            )}
-                                        </div>
-                                    ) : (
-                                        /* External Player Form */
-                                        <div className="external-form">
-                                            <div className="form-group">
-                                                <label>Nombre y Apellidos *</label>
-                                                <input
-                                                    type="text"
-                                                    value={externalForm.name}
-                                                    onChange={(e) => setExternalForm({ ...externalForm, name: e.target.value })}
-                                                    placeholder="Nombre completo"
-                                                />
-                                            </div>
-                                            <div className="form-row">
-                                                <div className="form-group">
-                                                    <label>Email</label>
-                                                    <input
-                                                        type="email"
-                                                        value={externalForm.email}
-                                                        onChange={(e) => setExternalForm({ ...externalForm, email: e.target.value })}
-                                                        placeholder="email@ejemplo.com"
-                                                    />
-                                                </div>
-                                                <div className="form-group">
-                                                    <label>Teléfono</label>
-                                                    <input
-                                                        type="tel"
-                                                        value={externalForm.phone}
-                                                        onChange={(e) => setExternalForm({ ...externalForm, phone: e.target.value })}
-                                                        placeholder="600 000 000"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <button className="btn-primary" onClick={handleAddExternal}>
-                                                ➕ Añadir Jugador Externo
-                                            </button>
-                                        </div>
-                                    )}
-                                </div>
-                            )}
                         </div>
                     )}
+                </div>
+            )}
+
+            {/* Add Player Form - Moved outside the main container for easier modal positioning on mobile */}
+            {showAddForm && (
+                <div className="add-player-overlay" onClick={() => setShowAddForm(false)}>
+                    <div className="add-player-panel" onClick={(e) => e.stopPropagation()}>
+                        <div className="panel-header">
+                            <h4>Añadir Jugador</h4>
+                            <button className="close-btn" onClick={() => {
+                                setShowAddForm(false);
+                                setIsExternalPlayer(false);
+                            }}>✕</button>
+                        </div>
+
+                        {/* Toggle Member/External */}
+                        <div className="player-type-toggle">
+                            <button
+                                className={`toggle-btn ${!isExternalPlayer ? 'active' : ''}`}
+                                onClick={() => setIsExternalPlayer(false)}
+                            >
+                                👤 Socio del Club
+                            </button>
+                            <button
+                                className={`toggle-btn ${isExternalPlayer ? 'active' : ''}`}
+                                onClick={() => setIsExternalPlayer(true)}
+                            >
+                                🆕 Jugador Externo
+                            </button>
+                        </div>
+
+                        {!isExternalPlayer ? (
+                            /* Member Search */
+                            <div className="member-search">
+                                <input
+                                    type="text"
+                                    placeholder="🔍 Buscar socio por nombre o email..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+
+                                {loadingMembers ? (
+                                    <div className="loading-state">
+                                        <div className="spinner"></div>
+                                    </div>
+                                ) : (
+                                    <div className="members-list">
+                                        {filteredMembers.length === 0 ? (
+                                            <p className="no-results">No se encontraron resultados</p>
+                                        ) : (
+                                            filteredMembers.slice(0, 10).map(member => {
+                                                const isRegistered = registrations.some(r => r.member_id === member.id);
+                                                return (
+                                                    <div
+                                                        key={member.id}
+                                                        className={`member-item ${isRegistered ? 'registered' : ''}`}
+                                                        onClick={() => !isRegistered && handleAddMember(member)}
+                                                    >
+                                                        <div className="member-info">
+                                                            <span className="member-name">{member.name}</span>
+                                                            {member.email && (
+                                                                <span className="member-email">{member.email}</span>
+                                                            )}
+                                                        </div>
+                                                        {isRegistered ? (
+                                                            <span className="registered-badge">✓ Inscrito</span>
+                                                        ) : (
+                                                            <span className="add-badge">+ Añadir</span>
+                                                        )}
+                                                    </div>
+                                                );
+                                            })
+                                        )}
+                                    </div>
+                                )}
+                                <div className="panel-footer">
+                                    <button className="btn-cancel" onClick={() => setShowAddForm(false)}>
+                                        Cancelar
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                            /* External Player Form */
+                            <div className="external-form">
+                                <div className="form-group">
+                                    <label>Nombre y Apellidos *</label>
+                                    <input
+                                        type="text"
+                                        value={externalForm.name}
+                                        onChange={(e) => setExternalForm({ ...externalForm, name: e.target.value })}
+                                        placeholder="Nombre completo"
+                                    />
+                                </div>
+                                <div className="form-row">
+                                    <div className="form-group">
+                                        <label>Email</label>
+                                        <input
+                                            type="email"
+                                            value={externalForm.email}
+                                            onChange={(e) => setExternalForm({ ...externalForm, email: e.target.value })}
+                                            placeholder="email@ejemplo.com"
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Teléfono</label>
+                                        <input
+                                            type="tel"
+                                            value={externalForm.phone}
+                                            onChange={(e) => setExternalForm({ ...externalForm, phone: e.target.value })}
+                                            placeholder="600 000 000"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="form-actions">
+                                    <button className="btn-cancel" onClick={() => setShowAddForm(false)}>
+                                        Cancelar
+                                    </button>
+                                    <button className="btn-primary" onClick={handleAddExternal}>
+                                        ➕ Añadir Jugador Externo
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
             )}
 
@@ -479,7 +500,7 @@ const StepPlayers = ({ tournamentData, updateData, tournamentId }) => {
             {seedModal.show && (
                 <div className="confirm-modal-overlay" onClick={handleCloseSeedModal}>
                     <div className="confirm-modal seed-modal" onClick={(e) => e.stopPropagation()}>
-                        <div className="confirm-modal-icon">🌱</div>
+                        <div className="confirm-modal-icon"><User size={32} /></div>
                         <h4>Cabeza de serie</h4>
                         <p>
                             Asigna un número de cabeza de serie para <strong>{seedModal.registration ? getPlayerName(seedModal.registration) : ''}</strong>

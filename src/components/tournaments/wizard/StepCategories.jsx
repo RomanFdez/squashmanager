@@ -172,76 +172,83 @@ const StepCategories = ({ tournamentData, updateData, tournamentId }) => {
                 </button>
             )}
 
-            {/* Category Form */}
+            {/* Category Form - Now in Modal Overlay */}
             {showForm && (
-                <div className="category-form">
-                    <h4>{editingCategory ? 'Editar Categoría' : 'Nueva Categoría'}</h4>
-
-                    <div className="form-row">
-                        <div className="form-group">
-                            <label>Nombre de la Categoría *</label>
-                            <input
-                                type="text"
-                                value={formData.name}
-                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                placeholder="Ej: Absoluta A, Veteranos +40..."
-                            />
+                <div className="category-overlay" onClick={resetForm}>
+                    <div className="category-form" onClick={(e) => e.stopPropagation()}>
+                        <div className="form-header">
+                            <h4>{editingCategory ? '✏️ Editar Categoría' : '➕ Nueva Categoría'}</h4>
+                            <button className="close-btn" onClick={resetForm}>✕</button>
                         </div>
-                    </div>
 
-                    <div className="form-row">
-                        <div className="form-group">
-                            <label>Tipo *</label>
-                            <div className="type-selector">
-                                {typeOptions.map(opt => (
-                                    <label
-                                        key={opt.id}
-                                        className={`type-option ${formData.type === opt.id ? 'selected' : ''}`}
+                        <div className="form-content">
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>Nombre de la Categoría *</label>
+                                    <input
+                                        type="text"
+                                        value={formData.name}
+                                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                        placeholder="Ej: Absoluta A, Veteranos +40..."
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>Tipo *</label>
+                                    <div className="type-selector">
+                                        {typeOptions.map(opt => (
+                                            <label
+                                                key={opt.id}
+                                                className={`type-option ${formData.type === opt.id ? 'selected' : ''}`}
+                                            >
+                                                <input
+                                                    type="radio"
+                                                    name="type"
+                                                    value={opt.id}
+                                                    checked={formData.type === opt.id}
+                                                    onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                                                />
+                                                <span className="icon">{opt.icon}</span>
+                                                <span>{opt.label}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>Grupo de Edad</label>
+                                    <select
+                                        value={formData.age_group}
+                                        onChange={(e) => setFormData({ ...formData, age_group: e.target.value })}
                                     >
-                                        <input
-                                            type="radio"
-                                            name="type"
-                                            value={opt.id}
-                                            checked={formData.type === opt.id}
-                                            onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                                        />
-                                        <span className="icon">{opt.icon}</span>
-                                        <span>{opt.label}</span>
-                                    </label>
-                                ))}
+                                        {ageGroupOptions.map(opt => (
+                                            <option key={opt.id} value={opt.id}>{opt.label}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div className="form-group">
+                                    <label>Límite de Participantes</label>
+                                    <input
+                                        type="number"
+                                        value={formData.max_participants}
+                                        onChange={(e) => setFormData({ ...formData, max_participants: e.target.value })}
+                                        placeholder="Sin límite"
+                                        min="2"
+                                    />
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div className="form-row">
-                        <div className="form-group">
-                            <label>Grupo de Edad</label>
-                            <select
-                                value={formData.age_group}
-                                onChange={(e) => setFormData({ ...formData, age_group: e.target.value })}
-                            >
-                                {ageGroupOptions.map(opt => (
-                                    <option key={opt.id} value={opt.id}>{opt.label}</option>
-                                ))}
-                            </select>
+                        <div className="form-actions-footer">
+                            <button className="btn-cancel" onClick={resetForm}>Cancelar</button>
+                            <button className="btn-primary" onClick={handleSave}>
+                                {editingCategory ? 'Guardar Cambios' : 'Añadir Categoría'}
+                            </button>
                         </div>
-                        <div className="form-group">
-                            <label>Límite de Participantes</label>
-                            <input
-                                type="number"
-                                value={formData.max_participants}
-                                onChange={(e) => setFormData({ ...formData, max_participants: e.target.value })}
-                                placeholder="Sin límite"
-                                min="2"
-                            />
-                        </div>
-                    </div>
-
-                    <div className="form-actions">
-                        <button className="btn-secondary" onClick={resetForm}>Cancelar</button>
-                        <button className="btn-primary" onClick={handleSave}>
-                            {editingCategory ? 'Guardar Cambios' : 'Añadir Categoría'}
-                        </button>
                     </div>
                 </div>
             )}
