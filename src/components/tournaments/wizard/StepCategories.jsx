@@ -115,8 +115,15 @@ const StepCategories = ({ tournamentData, updateData, tournamentId }) => {
     return (
         <div className="step-categories">
             <div className="categories-intro">
-                <h3>🏷️ Categorías del Torneo</h3>
-                <p>Define las categorías en las que se competirá</p>
+                <div className="intro-text">
+                    <h3>🏷️ Categorías del Torneo</h3>
+                    <p>Define las categorías en las que se competirá</p>
+                </div>
+                {tournamentData.categories.length > 0 && !showForm && (
+                    <button className="add-category-btn-top" onClick={handleAddNew}>
+                        ➕ Añadir Categoría
+                    </button>
+                )}
             </div>
 
             {/* Categories List */}
@@ -165,12 +172,7 @@ const StepCategories = ({ tournamentData, updateData, tournamentId }) => {
                 )}
             </div>
 
-            {/* Add Button */}
-            {tournamentData.categories.length > 0 && !showForm && (
-                <button className="add-category-btn" onClick={handleAddNew}>
-                    ➕ Añadir Categoría
-                </button>
-            )}
+
 
             {/* Category Form - Now in Modal Overlay */}
             {showForm && (

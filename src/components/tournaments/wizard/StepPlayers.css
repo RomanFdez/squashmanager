@@ -122,11 +122,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.5rem;
 }
 
 .section-header h4 {
-    font-size: 0.95rem;
+    font-size: 1.1rem;
     font-weight: 600;
     color: var(--text-primary);
     margin: 0;
@@ -138,11 +139,26 @@
     gap: 1rem;
 }
 
-.header-actions .add-player-btn {
-    padding: 0.4rem 0.8rem;
-    font-size: 0.85rem;
-    margin: 0;
-    /* Override bottom margin */
+.add-player-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.25rem;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.2);
+}
+
+.add-player-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(var(--accent-rgb), 0.3);
+    filter: brightness(1.1);
 }
 
 .capacity-wrapper {
@@ -344,23 +360,7 @@
     transform: scale(1.05);
 }
 
-.add-player-btn {
-    margin-top: 0.75rem;
-    padding: 0.75rem;
-    background: transparent;
-    border: 2px dashed var(--border-color);
-    border-radius: 8px;
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
 
-.add-player-btn:hover {
-    border-color: var(--accent-color);
-    color: var(--accent-color);
-    background: rgba(var(--accent-rgb), 0.05);
-}
 
 /* Floating Action Button */
 .add-player-fab {
@@ -577,10 +577,11 @@
     gap: 0.25rem;
 }
 
+.external-form .form-group label,
 .external-form label {
     font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.9);
-    /* Lighter white for high contrast */
+    color: #ffffff !important;
+    font-weight: 500;
 }
 
 .external-form input {
@@ -740,11 +741,25 @@
         flex-wrap: nowrap;
     }
 
-    .external-form .form-row {
-        grid-template-columns: 1fr;
+    .section-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
     }
 
-    /* Show FAB, hide regular button on mobile */
+    .header-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .add-player-btn {
+        width: 100%;
+        justify-content: center;
+        order: -1;
+        /* Button first on mobile */
+    }
+
+    /* Keep FAB as an extra shortcut on mobile */
     .add-player-fab {
         display: flex;
         align-items: center;
@@ -752,7 +767,9 @@
     }
 
     .add-player-btn {
-        display: none;
+        width: 100%;
+        justify-content: center;
+        margin-top: 1rem;
     }
 
     /* Mobile Modal for Add Player */

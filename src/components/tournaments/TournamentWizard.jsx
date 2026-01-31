@@ -16,47 +16,8 @@ const STEPS = [
 ];
 
 const TournamentWizard = ({ tournament, onComplete, onCancel }) => {
-    const [currentStep, setCurrentStep] = useState(1);
-    const [saving, setSaving] = useState(false);
-    const contentRef = useRef(null);
-    const [tournamentData, setTournamentData] = useState({
-        id: null,
-        name: '',
-        start_date: '',
-        end_date: '',
-        registration_deadline: '',
-        location: '',
-        price: 0,
-        payment_types: ['efectivo'],
-        match_format: 'best_of_3',
-        status: 'draft',
-        is_public: false,
-        courts: [],
-        categories: [],
-        images: []
-    });
-
-    useEffect(() => {
-        if (tournament) {
-            // Load existing tournament data
-            setTournamentData({
-                id: tournament.id,
-                name: tournament.name || '',
-                start_date: tournament.start_date || '',
-                end_date: tournament.end_date || '',
-                registration_deadline: tournament.registration_deadline || '',
-                location: tournament.location || '',
-                price: tournament.price || 0,
-                payment_types: tournament.payment_types || ['efectivo'],
-                match_format: tournament.match_format || 'best_of_3',
-                status: tournament.status || 'draft',
-                is_public: tournament.is_public || false,
-                courts: tournament.tournament_courts || [],
-                categories: tournament.tournament_categories || [],
-                images: tournament.tournament_images || []
-            });
-        }
-    }, [tournament]);
+    const [isNavVisible, setIsNavVisible] = useState(true);
+    const lastScrollTop = useRef(0);
 
     // Auto-scroll to top when step changes or on mount
     useEffect(() => {
@@ -67,7 +28,45 @@ const TournamentWizard = ({ tournament, onComplete, onCancel }) => {
         if (contentRef.current) {
             contentRef.current.scrollTo(0, 0);
         }
+        setIsNavVisible(true); // Reset visibility on step change
     }, [currentStep]);
+
+    // Smart Navigation: Show/Hide buttons on scroll
+    useEffect(() => {
+        const handleScroll = () => {
+            if (!contentRef.current) return;
+            const { scrollTop, scrollHeight, clientHeight } = contentRef.current;
+
+            // 1. Always show if content is not scrollable
+            if (scrollHeight <= clientHeight + 20) {
+                setIsNavVisible(true);
+                return;
+            }
+
+            // 2. Show if we are near the bottom (threshold 80px)
+            const isAtBottom = scrollHeight - scrollTop <= clientHeight + 80;
+
+            // 3. Show if scrolling UP, hide if scrolling DOWN
+            const isScrollingUp = scrollTop < lastScrollTop.current;
+
+            // 4. Always show at the very top
+            const isAtTop = scrollTop < 20;
+
+            if (isAtBottom || isScrollingUp || isAtTop) {
+                setIsNavVisible(true);
+            } else {
+                setIsNavVisible(false);
+            }
+
+            lastScrollTop.current = scrollTop;
+        };
+
+        const content = contentRef.current;
+        if (content) {
+            content.addEventListener('scroll', handleScroll);
+            return () => content.removeEventListener('scroll', handleScroll);
+        }
+    }, [currentStep, tournamentData]); // Re-run if content changes length
 
     const updateData = (field, value) => {
         setTournamentData(prev => ({
@@ -222,7 +221,7 @@ const TournamentWizard = ({ tournament, onComplete, onCancel }) => {
             </div>
 
             {/* Navigation */}
-            <div className="wizard-navigation">
+            <div className={`wizard-navigation ${!isNavVisible ? 'nav-hidden' : ''}`}>
                 <button
                     className="btn btn-secondary"
                     onClick={handleBack}

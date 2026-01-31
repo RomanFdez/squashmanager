@@ -9,19 +9,66 @@
 }
 
 .categories-intro {
-    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.intro-text {
+    text-align: left;
 }
 
 .categories-intro h3 {
     font-size: 1.1rem;
     color: var(--text-primary);
-    margin-bottom: 0.25rem;
+    margin: 0;
 }
 
 .categories-intro p {
     color: var(--text-secondary);
     font-size: 0.85rem;
+    margin: 0;
+}
+
+.add-category-btn-top {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.25rem;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.2);
+}
+
+.add-category-btn-top:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(var(--accent-rgb), 0.3);
+    filter: brightness(1.1);
+}
+
+@media (max-width: 768px) {
+    .categories-intro {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+
+    .intro-text {
+        text-align: center;
+    }
+
+    .add-category-btn-top {
+        width: 100%;
+        justify-content: center;
+    }
 }
 
 /* Categories List */
@@ -229,18 +276,24 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 10px;
     cursor: pointer;
-    color: rgba(255, 255, 255, 0.7);
+    color: #ffffff;
+    /* Forced solid white for icons and text */
     transition: all 0.3s ease;
+    opacity: 0.6;
+    /* Lower opacity for inactive */
 }
 
 .type-option:hover {
     border-color: var(--accent-color);
+    opacity: 1;
 }
 
 .type-option.selected {
     border-color: var(--accent-color);
     background: rgba(var(--accent-rgb), 0.2);
     color: #ffffff;
+    opacity: 1;
+    /* Full opacity for selected */
 }
 
 .type-option input {
@@ -329,12 +382,14 @@
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.category-form .form-group label,
 .category-form label {
     font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.9);
-    /* Much lighter white for better visibility */
+    color: #ffffff !important;
+    /* Force pure white to override global styles */
     margin-bottom: 0.4rem;
     display: block;
+    font-weight: 500;
 }
 
 .category-form input[type="text"],
