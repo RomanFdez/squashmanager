@@ -18,6 +18,14 @@ const Tournaments = () => {
         loadTournaments();
     }, []);
 
+    // Auto-scroll to top when switching views (list -> brackets, etc)
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }, [view]);
+
     const loadTournaments = async () => {
         try {
             setLoading(true);
