@@ -516,13 +516,19 @@ const TournamentBracketView = ({ tournament, onBack, onUpdate, isPublicView = fa
                                         onClick={() => isClickable && openScoreModal(matchWithPlayers)}
                                     >
                                         <div className="match-content">
-                                            <span>{getPlayerName(p1)}</span>
+                                            <span>
+                                                {getPlayerName(p1)}
+                                                {p1?.seed && <span className="seed-badge">#{p1.seed}</span>}
+                                            </span>
                                             {m.score_summary ? (
                                                 <span className="score-summary">{m.score_summary}</span>
                                             ) : (
                                                 <span className="vs">vs</span>
                                             )}
-                                            <span>{getPlayerName(p2)}</span>
+                                            <span>
+                                                {getPlayerName(p2)}
+                                                {p2?.seed && <span className="seed-badge">#{p2.seed}</span>}
+                                            </span>
                                         </div>
                                         {isClickable && (
                                             <div className="enter-score-hint">

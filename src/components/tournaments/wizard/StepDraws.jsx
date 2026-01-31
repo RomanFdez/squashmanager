@@ -254,9 +254,15 @@ const StepDraws = ({ tournamentData, updateData, tournamentId }) => {
                                 const p2 = group.tournament_group_players.find(p => p.registration_id === m.player2_id)?.registration;
                                 return (
                                     <div key={m.id} className="mini-match-row">
-                                        <span>{getPlayerName(p1)}</span>
+                                        <span>
+                                            {getPlayerName(p1)}
+                                            {p1?.seed && <span className="seed-badge">#{p1.seed}</span>}
+                                        </span>
                                         <span className="vs">vs</span>
-                                        <span>{getPlayerName(p2)}</span>
+                                        <span>
+                                            {getPlayerName(p2)}
+                                            {p2?.seed && <span className="seed-badge">#{p2.seed}</span>}
+                                        </span>
                                     </div>
                                 );
                             })}
