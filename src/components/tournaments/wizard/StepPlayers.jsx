@@ -465,9 +465,9 @@ const StepPlayers = ({ tournamentData, updateData, tournamentId }) => {
                 <div className="confirm-modal-overlay" onClick={handleCloseSeedModal}>
                     <div className="confirm-modal seed-modal" onClick={(e) => e.stopPropagation()}>
                         <div className="confirm-modal-icon">🌱</div>
-                        <h4>Asignar Seed</h4>
+                        <h4>Cabeza de serie</h4>
                         <p>
-                            Asigna un número de seed para <strong>{seedModal.registration ? getPlayerName(seedModal.registration) : ''}</strong>
+                            Asigna un número de cabeza de serie para <strong>{seedModal.registration ? getPlayerName(seedModal.registration) : ''}</strong>
                         </p>
                         <div className="seed-input-group">
                             <input
@@ -487,7 +487,7 @@ const StepPlayers = ({ tournamentData, updateData, tournamentId }) => {
                             </button>
                             {seedModal.registration?.seed && (
                                 <button className="btn btn-danger" onClick={handleClearSeed}>
-                                    Quitar Seed
+                                    Quitar
                                 </button>
                             )}
                             <button className="btn btn-primary" onClick={handleSetSeed}>
