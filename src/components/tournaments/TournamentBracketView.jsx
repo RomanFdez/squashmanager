@@ -810,53 +810,62 @@ const TournamentBracketView = ({ tournament, onBack, onUpdate, isPublicView = fa
 
     return (
         <div className="bracket-view-page">
-            <div className="category-tabs-scrollable">
-                {onBack && (
-                    <button className="btn-back" onClick={onBack}>
-                        ← Volver
-                    </button>
+            <header className="bracket-header-new">
+                {/* Row 1: Only for Private View */}
+                {!isPublicView && (
+                    <div className="header-top-nav">
+                        {onBack && (
+                            <button className="btn-nav-transparent" onClick={onBack}>
+                                ← Volver
+                            </button>
+                        )}
+                        {tournament?.public_slug && (
+                            <a
+                                href={`/torneo/${tournament.public_slug}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="btn-nav-transparent"
+                            >
+                                🔗 Vista Pública
+                            </a>
+                        )}
+                    </div>
                 )}
-                <div className="category-tabs">
-                    <button
-                        className={`category-tab info-tab ${activeTab === 'info' ? 'active' : ''}`}
-                        onClick={() => setActiveTab('info')}
-                    >
-                        ℹ️ Info
-                    </button>
-                    {categories.map(cat => (
+
+                {/* Row 2: Category Tabs & Settings */}
+                <div className="header-tabs-row">
+                    <div className="category-tabs">
                         <button
-                            key={cat.id}
-                            className={`category-tab ${activeTab === cat.id ? 'active' : ''}`}
-                            onClick={() => setActiveTab(cat.id)}
+                            className={`category-tab info-tab ${activeTab === 'info' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('info')}
                         >
-                            <span className="type-icon">{getCategoryTypeIcon(cat.type)}</span>
-                            {cat.name}
+                            ℹ️ Info
                         </button>
-                    ))}
-                </div>
-                <div className="tabs-right-actions">
+                        {categories.map(cat => (
+                            <button
+                                key={cat.id}
+                                className={`category-tab ${activeTab === cat.id ? 'active' : ''}`}
+                                onClick={() => setActiveTab(cat.id)}
+                            >
+                                <span className="type-icon">{getCategoryTypeIcon(cat.type)}</span>
+                                {cat.name}
+                            </button>
+                        ))}
+                    </div>
                     {activeTab !== 'info' && (
-                        <label className="detailed-score-toggle">
-                            <input
-                                type="checkbox"
-                                checked={showDetailedScore}
-                                onChange={(e) => setShowDetailedScore(e.target.checked)}
-                            />
-                            <span className="toggle-label">Sets</span>
-                        </label>
-                    )}
-                    {!isPublicView && tournament?.public_slug && (
-                        <a
-                            href={`/torneo/${tournament.public_slug}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="public-link-btn"
-                        >
-                            🔗 Pública
-                        </a>
+                        <div className="tabs-right-actions">
+                            <label className="detailed-score-toggle">
+                                <input
+                                    type="checkbox"
+                                    checked={showDetailedScore}
+                                    onChange={(e) => setShowDetailedScore(e.target.checked)}
+                                />
+                                <span className="toggle-label">Sets</span>
+                            </label>
+                        </div>
                     )}
                 </div>
-            </div>
+            </header>
 
             {renderTournamentContent()}
 
