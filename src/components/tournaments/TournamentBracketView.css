@@ -171,14 +171,15 @@
     display: flex;
     gap: 0.35rem;
     min-width: min-content;
+    background: transparent;
 }
 
 .category-tab {
-    padding: 0.35rem 0.8rem;
+    padding: 0.4rem 0.8rem;
     border-radius: 6px;
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    background: rgba(255, 255, 255, 0.15);
-    color: white;
+    border: none;
+    background: white;
+    color: var(--primary-color);
     font-size: 0.8rem;
     font-weight: 600;
     cursor: pointer;
@@ -187,33 +188,32 @@
     display: flex;
     align-items: center;
     gap: 0.4rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
 }
 
 .category-tab .type-icon {
     font-size: 0.9rem;
-    opacity: 0.9;
 }
 
 .category-tab.active {
-    background: white;
-    border-color: white;
-    color: var(--primary-color);
+    background: var(--primary-color);
+    color: white;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 }
 
 .category-tab.info-tab {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-    border-color: rgba(255, 255, 255, 0.4);
-}
-
-.category-tab.info-tab.active {
     background: white;
     color: var(--primary-color);
 }
 
+.category-tab.info-tab.active {
+    background: var(--primary-color);
+    color: white;
+}
+
 .category-tab:hover:not(.active) {
-    background: rgba(255, 255, 255, 0.25);
-    border-color: rgba(255, 255, 255, 0.5);
+    background: #f5f5f5;
+    transform: translateY(-1px);
 }
 
 /* Info View Styles embedded in Bracket View */
